@@ -172,6 +172,7 @@ def numeric_profiling(df_pkl, col):
                      'stdv': df_pkl[col].std(),
                      '25%': df_pkl[col].quantile(.25),
                      'median': df_pkl[col].median(),
+                     'mode': df_pkl[col].mode(),
                      '75%': df_pkl[col].quantile(.75),
                      'kurtosis': df_pkl[col].kurt(),
                      'skewness': df_pkl[col].skew(),

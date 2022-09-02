@@ -682,7 +682,31 @@ def lista_mex_enf(df):
     df['estrechez_uretral'] = np.where(df['codigos_cie'].str.contains('N35'), 1, 0)
     df['ot_trast_uretra'] = np.where(df['codigos_cie'].str.contains('N36'), 1, 0)
     df['trast_uretra_enf_c_ot_part'] = np.where(df['codigos_cie'].str.contains('N37'), 1, 0)
-    df['ot_trast_sistema_urinario'] = np.where(df['codigos_cie'].str.contains('N39'), 1, 0)  
+    df['ot_trast_sistema_urinario'] = np.where(df['codigos_cie'].str.contains('N39'), 1, 0) 
+    
+    # ENFERMEDADES DEL HIGADO
+    df['enf_alcoholica_higado'] = np.where(df['codigos_cie'].str.contains('K70'), 1, 0)
+    df['enf_toxica_higado'] = np.where(df['codigos_cie'].str.contains('K71'), 1, 0)
+    df['insuficiencia_hepatica_no_c_ot_part'] = np.where(df['codigos_cie'].str.contains('K72'), 1, 0)
+    df['hepatitis_cronica_no_c_ot_part'] = np.where(df['codigos_cie'].str.contains('K73'), 1, 0)
+    df['fibrosis_cirrosis_higado'] = np.where(df['codigos_cie'].str.contains('K74'), 1, 0)
+    df['absceso_higado'] = np.where(df['codigos_cie'].str.contains('K750'), 1, 0)
+    df['flebitis_de_la_vena_porta'] = np.where(df['codigos_cie'].str.contains('K751'), 1, 0)
+    df['hepatitis_reactiva_no_especifica'] = np.where(df['codigos_cie'].str.contains('K752'), 1, 0)
+    df['hepatitis_granulomatosa_no_c_ot_part'] = np.where(df['codigos_cie'].str.contains('K753'), 1, 0)
+    df['hepatitis_autoinmune'] = np.where(df['codigos_cie'].str.contains('K754'), 1, 0)
+    df['otras_enfes_inflamatorias_higado_esp'] = np.where(df['codigos_cie'].str.contains('K758'), 1, 0)
+    df['enf_inflamatoria_higado_ne'] = np.where(df['codigos_cie'].str.contains('K759'), 1, 0)
+    df['degeneracion_grasa_higado_no_c_ot_part'] = np.where(df['codigos_cie'].str.contains('K760'), 1, 0)
+    df['congestion_pasiva_cronica_higado'] = np.where(df['codigos_cie'].str.contains('K761'), 1, 0)
+    df['necrosis_hemorragica_central_higado'] = np.where(df['codigos_cie'].str.contains('K762'), 1, 0)
+    df['infarto_higado'] = np.where(df['codigos_cie'].str.contains('K763'), 1, 0)
+    df['peliosis_hepatica'] = np.where(df['codigos_cie'].str.contains('K764'), 1, 0)
+    df['enf_veno_oclus_higado'] = np.where(df['codigos_cie'].str.contains('K765'), 1, 0)
+    df['hipertension_portal'] = np.where(df['codigos_cie'].str.contains('K766'), 1, 0)
+    df['sindrome_hepatorrenal'] = np.where(df['codigos_cie'].str.contains('K767'), 1, 0)
+    df['otras_enfes_esp_higado'] = np.where(df['codigos_cie'].str.contains('K768'), 1, 0)
+    df['enf_higado_ne'] = np.where(df['codigos_cie'].str.contains('K769'), 1, 0)
     
 
     # ----------------------------------------------------------------------------------------------------------
@@ -846,6 +870,30 @@ def lista_mex_enf(df):
     df['ot_trast_uretra'] = df['ot_trast_uretra'].astype('category')
     df['trast_uretra_enf_c_ot_part'] = df['trast_uretra_enf_c_ot_part'].astype('category')
     df['ot_trast_sistema_urinario'] = df['ot_trast_sistema_urinario'].astype('category')
+    
+    # enf hígado
+    df['enf_alcoholica_higado'] = df['enf_alcoholica_higado'].astype('category')
+    df['enf_toxica_higado'] = df['enf_toxica_higado'].astype('category')
+    df['insuficiencia_hepatica_no_c_ot_part'] = df['insuficiencia_hepatica_no_c_ot_part'].astype('category')
+    df['hepatitis_cronica_no_c_ot_part'] = df['hepatitis_cronica_no_c_ot_part'].astype('category')
+    df['fibrosis_cirrosis_higado'] = df['fibrosis_cirrosis_higado'].astype('category')
+    df['absceso_higado'] = df['absceso_higado'].astype('category')
+    df['flebitis_de_la_vena_porta'] = df['flebitis_de_la_vena_porta'].astype('category')
+    df['hepatitis_reactiva_no_especifica'] = df['hepatitis_reactiva_no_especifica'].astype('category')
+    df['hepatitis_granulomatosa_no_c_ot_part'] = df['hepatitis_granulomatosa_no_c_ot_part'].astype('category')
+    df['hepatitis_autoinmune'] = df['hepatitis_autoinmune'].astype('category')
+    df['otras_enfes_inflamatorias_higado_esp'] = df['otras_enfes_inflamatorias_higado_esp'].astype('category')
+    df['enf_inflamatoria_higado_ne'] = df['enf_inflamatoria_higado_ne'].astype('category')
+    df['degeneracion_grasa_higado_no_c_ot_part'] = df['degeneracion_grasa_higado_no_c_ot_part'].astype('category')
+    df['congestion_pasiva_cronica_higado'] = df['congestion_pasiva_cronica_higado'].astype('category')
+    df['necrosis_hemorragica_central_higado'] = df['necrosis_hemorragica_central_higado'].astype('category')
+    df['infarto_higado'] = df['infarto_higado'].astype('category')
+    df['peliosis_hepatica'] = df['peliosis_hepatica'].astype('category')
+    df['enf_veno_oclus_higado'] = df['enf_veno_oclus_higado'].astype('category')
+    df['hipertension_portal'] = df['hipertension_portal'].astype('category')
+    df['sindrome_hepatorrenal'] = df['sindrome_hepatorrenal'].astype('category')
+    df['otras_enfes_esp_higado'] = df['otras_enfes_esp_higado'].astype('category')
+    df['enf_higado_ne'] = df['enf_higado_ne'].astype('category')
     
     return df
 

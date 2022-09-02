@@ -727,6 +727,29 @@ def lista_mex_enf(df):
     df['aumento_anormal_peso'] = np.where(df['codigos_cie'].str.contains('R635'), 1, 0)
     df['aumento_excesivo_peso_embarazo'] = np.where(df['codigos_cie'].str.contains('O260'), 1, 0)
     
+    # ENFERMEDADES HIPERTENSIVAS
+    df['I10'] = np.where(df['codigos_cie'].str.contains('I10'), 1, 0)
+    df['I110'] = np.where(df['codigos_cie'].str.contains('I110'), 1, 0)
+    df['I119'] = np.where(df['codigos_cie'].str.contains('I119'), 1, 0)
+    df['I120'] = np.where(df['codigos_cie'].str.contains('I120'), 1, 0)
+    df['I129'] = np.where(df['codigos_cie'].str.contains('I129'), 1, 0)
+    df['I130'] = np.where(df['codigos_cie'].str.contains('I130'), 1, 0)
+    df['I131'] = np.where(df['codigos_cie'].str.contains('I131'), 1, 0)
+    df['I132'] = np.where(df['codigos_cie'].str.contains('I132'), 1, 0)
+    df['I139'] = np.where(df['codigos_cie'].str.contains('I139'), 1, 0)
+    df['I151'] = np.where(df['codigos_cie'].str.contains('I151'), 1, 0)
+    df['I152'] = np.where(df['codigos_cie'].str.contains('I152'), 1, 0)
+    df['I158'] = np.where(df['codigos_cie'].str.contains('I158'), 1, 0)
+    df['I159'] = np.where(df['codigos_cie'].str.contains('I159'), 1, 0)
+    # ARTERIOESCLEROSIS
+    df['Y526'] = np.where(df['codigos_cie'].str.contains('Y526'), 1, 0)
+    df['I700'] = np.where(df['codigos_cie'].str.contains('I700'), 1, 0)
+    df['I701'] = np.where(df['codigos_cie'].str.contains('I701'), 1, 0)
+    df['I702'] = np.where(df['codigos_cie'].str.contains('I702'), 1, 0)
+    df['I708'] = np.where(df['codigos_cie'].str.contains('I708'), 1, 0)
+    df['I709'] = np.where(df['codigos_cie'].str.contains('I709'), 1, 0)
+    df['T466'] = np.where(df['codigos_cie'].str.contains('T466'), 1, 0)
+    
     # ----------------------------------------------------------------------------------------------------------
     df["enf_inf_intestinales"] = df['enf_inf_intestinales'].astype('category')
     df["tuberculosis"] = df['tuberculosis'].astype('category')
@@ -931,6 +954,29 @@ def lista_mex_enf(df):
     df['hiperalimentacion'] = df['hiperalimentacion'].astype('category')
     df['aumento_anormal_peso'] = df['aumento_anormal_peso'].astype('category')
     df['aumento_excesivo_peso_embarazo'] = df['aumento_excesivo_peso_embarazo'].astype('category')
+    
+    # enf hipertensivas
+    df['I10'] = df['I10'].astype('category')
+    df['I110'] = df['I110'].astype('category')
+    df['I119'] = df['I119'].astype('category')
+    df['I120'] = df['I120'].astype('category')
+    df['I129'] = df['I129'].astype('category')
+    df['I130'] = df['I130'].astype('category')
+    df['I131'] = df['I131'].astype('category')
+    df['I132'] = df['I132'].astype('category')
+    df['I139'] = df['I139'].astype('category')
+    df['I151'] = df['I151'].astype('category')
+    df['I152'] = df['I152'].astype('category')
+    df['I158'] = df['I158'].astype('category')
+    df['I159'] = df['I159'].astype('category')
+    # arteriosc
+    df['Y526'] = df['Y526'].astype('category')
+    df['I700'] = df['I700'].astype('category')
+    df['I701'] = df['I701'].astype('category')
+    df['I702'] = df['I702'].astype('category')
+    df['I708'] = df['I708'].astype('category')
+    df['I709'] = df['I709'].astype('category')
+    df['T466'] = df['T466'].astype('category')
     
     return df
 

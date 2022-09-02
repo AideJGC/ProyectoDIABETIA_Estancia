@@ -708,7 +708,25 @@ def lista_mex_enf(df):
     df['otras_enfes_esp_higado'] = np.where(df['codigos_cie'].str.contains('K768'), 1, 0)
     df['enf_higado_ne'] = np.where(df['codigos_cie'].str.contains('K769'), 1, 0)
     
-
+    # OBESIDAD
+    df['adiposidad_localizada'] = np.where(df['codigos_cie'].str.contains('E65'), 1, 0)
+    df['obesidad'] = np.where(df['codigos_cie'].str.contains('E66'), 1, 0)
+    df['obesidad_exceso_calorias'] = np.where(df['codigos_cie'].str.contains('E660'), 1, 0)
+    df['obesidad_por_drogas'] = np.where(df['codigos_cie'].str.contains('E661'), 1, 0)
+    df['obesidad_extrema_hipov_alveolar'] = np.where(df['codigos_cie'].str.contains('E662'), 1, 0)
+    df['obesidad_morbida'] = np.where(df['codigos_cie'].str.contains('E668'), 1, 0)
+    df['obesidad_simple'] = np.where(df['codigos_cie'].str.contains('E669'), 1, 0)
+    df['otra_hiperalimentacion'] = np.where(df['codigos_cie'].str.contains('E67'), 1, 0)
+    df['hipervitaminosis_a'] = np.where(df['codigos_cie'].str.contains('E670'), 1, 0)
+    df['hipercarotinemia'] = np.where(df['codigos_cie'].str.contains('E671'), 1, 0)
+    df['sindrome_de_megavitamina_b6'] = np.where(df['codigos_cie'].str.contains('E672'), 1, 0)
+    df['hipervitaminosis_d'] = np.where(df['codigos_cie'].str.contains('E673'), 1, 0)
+    df['ot_hiperalimentacion_esp'] = np.where(df['codigos_cie'].str.contains('E678'), 1, 0)
+    df['secuelas_hiperalimentacion'] = np.where(df['codigos_cie'].str.contains('E68'), 1, 0)
+    df['hiperalimentacion'] = np.where(df['codigos_cie'].str.contains('R632'), 1, 0)
+    df['aumento_anormal_peso'] = np.where(df['codigos_cie'].str.contains('R635'), 1, 0)
+    df['aumento_excesivo_peso_embarazo'] = np.where(df['codigos_cie'].str.contains('O260'), 1, 0)
+    
     # ----------------------------------------------------------------------------------------------------------
     df["enf_inf_intestinales"] = df['enf_inf_intestinales'].astype('category')
     df["tuberculosis"] = df['tuberculosis'].astype('category')
@@ -894,6 +912,25 @@ def lista_mex_enf(df):
     df['sindrome_hepatorrenal'] = df['sindrome_hepatorrenal'].astype('category')
     df['otras_enfes_esp_higado'] = df['otras_enfes_esp_higado'].astype('category')
     df['enf_higado_ne'] = df['enf_higado_ne'].astype('category')
+    
+    #obses
+    df['adiposidad_localizada'] = df['adiposidad_localizada'].astype('category')
+    df['obesidad'] = df['obesidad'].astype('category')
+    df['obesidad_exceso_calorias'] = df['obesidad_exceso_calorias'].astype('category')
+    df['obesidad_por_drogas'] = df['obesidad_por_drogas'].astype('category')
+    df['obesidad_extrema_hipov_alveolar'] = df['obesidad_extrema_hipov_alveolar'].astype('category')
+    df['obesidad_morbida'] = df['obesidad_morbida'].astype('category')
+    df['obesidad_simple'] = df['obesidad_simple'].astype('category')
+    df['otra_hiperalimentacion'] = df['otra_hiperalimentacion'].astype('category')
+    df['hipervitaminosis_a'] = df['hipervitaminosis_a'].astype('category')
+    df['hipercarotinemia'] = df['hipercarotinemia'].astype('category')
+    df['sindrome_de_megavitamina_b6'] = df['sindrome_de_megavitamina_b6'].astype('category')
+    df['hipervitaminosis_d'] = df['hipervitaminosis_d'].astype('category')
+    df['ot_hiperalimentacion_esp'] = df['ot_hiperalimentacion_esp'].astype('category')
+    df['secuelas_hiperalimentacion'] = df['secuelas_hiperalimentacion'].astype('category')
+    df['hiperalimentacion'] = df['hiperalimentacion'].astype('category')
+    df['aumento_anormal_peso'] = df['aumento_anormal_peso'].astype('category')
+    df['aumento_excesivo_peso_embarazo'] = df['aumento_excesivo_peso_embarazo'].astype('category')
     
     return df
 

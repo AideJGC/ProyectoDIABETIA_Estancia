@@ -8,6 +8,96 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 import pickle
 
+def laboratories(df):
+    """
+    """
+    df['lab_colesterol'] = np.where(pd.isna(df['colesterol']),0,1)
+    df['lab_trigliceridos'] = np.where(pd.isna(df['trigliceridos']),0,1)
+    df['lab_hdl'] = np.where(pd.isna(df['hdl']),0,1)
+    df['lab_ldl'] = np.where(pd.isna(df['ldl']),0,1)
+    df['lab_hba1c'] = np.where(pd.isna(df['hba1c']),0,1)
+    df['lab_plaquetas'] = np.where(pd.isna(df['plaquetas']),0,1)
+    df['lab_creatinina'] = np.where(pd.isna(df['creatinina']),0,1)
+    df['lab_acido_urico'] = np.where(pd.isna(df['acido_urico']),0,1)
+    df['lab_urea'] = np.where(pd.isna(df['urea']),0,1)
+    df['lab_tfg'] = np.where(pd.isna(df['tfg']),0,1)
+    
+    return df
+
+def cod_medicamento(df):
+    """
+    """
+    df['cod_med'] = np.nan
+
+    for i in range(len(df['cx_curp'])):
+        x = df['medicamentos'][i]
+        if(~pd.isna(x) and x!= 'nan'):
+            for j in range(len(df_m['DESCRIPCION_ARTICULO'])):
+                y = df_m['DESCRIPCION_ARTICULO'][j]
+                m = df_m['ID_PRODUCTO'][j]
+                if y in str(x):
+                    df['cod_med'][i] = str(df['cod_med'][i]) + ',' + str(m)
+                    
+    df['cod_med'] = df['cod_med'].str.replace('nan,','')
+    
+    return df
+    
+  
+def num_medicamentos(df):
+    df['num_med'] = df['cod_med'].apply(lambda x : len(str(x).split(',')))
+    df["num_med"] = np.where(pd.isna(df["cod_med"]), 0, df["num_med"])
+    return df
+    
+    
+def edad_range(df):
+    df["edad_range"] = np.nan
+    df.loc[(df['edad'] <  11), 'edad_range'] = 1#'hasta 10 años'
+    df.loc[(df['edad'] > 10) & (df['edad'] <= 20), 'edad_range'] = 2#'11-20'
+    df.loc[(df['edad'] > 20) & (df['edad'] <= 30), 'edad_range'] = 3#'21-30'
+    df.loc[(df['edad'] > 30) & (df['edad'] <= 40), 'edad_range'] = 4#'31-40'
+    df.loc[(df['edad'] > 40) & (df['edad'] <= 50), 'edad_range'] = 5#'41-50'
+    df.loc[(df['edad'] > 50) & (df['edad'] <= 60), 'edad_range'] = 6#'51-60'
+    df.loc[(df['edad'] > 60) & (df['edad'] <= 70), 'edad_range'] = 7#'61-70'
+    df.loc[(df['edad'] > 70) & (df['edad'] <= 80), 'edad_range'] = 8#'71-80'
+    df.loc[(df['edad'] > 80) & (df['edad'] <= 90), 'edad_range'] = 9#'81-90'
+    df.loc[(df['edad'] > 90  ), 'edad_range'] = 10#'91 y más'
+    return df
+    
+    
+def epoca_nac(df):
+    df["year_nac"] = pd.DatetimeIndex(df['fecha_nacimiento']).year
+    df["epoca_nac"] = np.nan
+    pd.DatetimeIndex(df['fecha_nacimiento']).year.unique()
+
+    for i in range(len(df['cx_curp'])):
+        x = df["year_nac"][i]
+        if(~pd.isna(x)):
+            if(x<=1910):
+                df["epoca_nac"][i] = 0
+            elif(x>1910 and x<= 1920):
+                df["epoca_nac"][i] = 1
+            elif(x>1920 and x<= 1930):
+                df["epoca_nac"][i] = 2
+            elif(x>1930 and x<= 1940):
+                df["epoca_nac"][i] = 3
+            elif(x>1940 and x<= 1950):
+                df["epoca_nac"][i] = 4
+            elif(x>1950 and x<= 1960):
+                df["epoca_nac"][i] = 5
+            elif(x>1960 and x<= 1970):
+                df["epoca_nac"][i] = 6
+            elif(x>1970 and x<= 1980):
+                df["epoca_nac"][i] = 7
+            elif(x>1980 and x<= 1990):
+                df["epoca_nac"][i] = 8
+            elif(x>1990 and x<= 2000):
+               df["epoca_nac"][i] = 9
+            else:
+               df["epoca_nac"][i] = 10
+        
+    return df
+
+
 
 def imc_calculo_range(imc):
     imc = imc.iloc[0]

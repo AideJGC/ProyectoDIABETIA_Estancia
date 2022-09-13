@@ -42,7 +42,7 @@ def cod_medicamento(df):
     
     return df
     
-  
+    
 def num_medicamentos(df):
     df['num_med'] = df['cod_med'].apply(lambda x : len(str(x).split(',')))
     df["num_med"] = np.where(pd.isna(df["cod_med"]), 0, df["num_med"])
@@ -98,20 +98,58 @@ def epoca_nac(df):
     return df
 
 
+def imc_calculo_range(df):
+    df["imc_range"] = np.nan
+    df.loc[(df['imc_calculado'] <  18.5), 'imc_range'] = 1#'Bajo peso'
+    df.loc[(df['imc_calculado'] >= 18.5) & (df['imc_calculado'] < 25), 'imc_range'] = 2#'Peso normal'
+    df.loc[(df['imc_calculado'] >= 25  ) & (df['imc_calculado'] < 30), 'imc_range'] = 3#'Sobrepeso'
+    df.loc[(df['imc_calculado'] >= 30  ), 'imc_range'] = 4#'Obesidad'
+    return df
 
-def imc_calculo_range(imc):
-    imc = imc.iloc[0]
-    range_imc = np.nan
-    #print("imc -> ",imc)
-    if (imc < 18.5):
-        range_imc = 'Bajo peso'
-    elif (imc >= 18.5) & (imc < 25):
-        range_imc = 'Peso normal'
-    elif (imc >= 25  ) & (imc < 30):
-        range_imc = 'Sobrepeso'
-    elif (imc >= 30  ):
-        range_imc = 'Obesidad'
-    return range_imc
+
+def ventana_ini_consulta(df):
+    df["vent_ini_aux"] = np.nan
+    grp = df.groupby('cx_curp')['fecha_consulta']
+    for i, group in grp:  
+        df["vent_ini_aux"][df.index.isin(group.index)] = group.sub(group.iloc[0])
+
+    df['vent_ini_consul'] = df['vent_ini_aux'].dt.days.abs() 
+    print(df['vent_ini_aux'])
+    df["vent_entre_consul"] = df.groupby(["cx_curp"])["fecha_consulta"].diff().dt.days
+    return df
+
+
+def ventana_entre_consultas(df):
+    df["vent_ini_aux"] = np.nan
+    grp = df.groupby('cx_curp')['fecha_consulta']
+    for i, group in grp:  
+        df["vent_ini_aux"][df.index.isin(group.index)] = group.sub(group.iloc[0])
+
+    df['vent_years_consul'] = (df['vent_ini_aux'].dt.days.abs() / 365).astype('int')
+    return df
+
+
+def ventana_ini_lab(df):
+    df["vent_ini_aux"] = np.nan
+    grp = df.groupby('cx_curp')['fecha_laboratorio']
+    for i, group in grp:  
+        df["vent_ini_aux"][df.index.isin(group.index)] = group.sub(group.iloc[0])
+
+    df['vent_ini_lab'] = df['vent_ini_aux'].dt.days.abs() 
+    df["vent_entre_lab"] = df.groupby(["cx_curp"])["fecha_laboratorio"].diff().dt.days
+    df.drop(['vent_ini_aux'], axis=1)
+    return df
+
+"""
+def ventana_entre_lab(df):# pendiente si se quita
+    df["vent_ini_aux"] = np.nan
+    grp = df.groupby('cx_curp')['fecha_laboratorio']
+    for i, group in grp:  
+        df["vent_ini_aux"][df.index.isin(group.index)] = group.sub(group.iloc[0])
+
+    df['vent_years_lab'] = (df['vent_ini_aux'].dt.days.abs() / 365).astype('int')
+    return df
+"""    
 
 def dias_year(date):
     days = np.nan

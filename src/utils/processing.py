@@ -184,6 +184,394 @@ def fecha_ini_fin(fecha_ini):
     
     return a_ini, a_inter, a_fin
 
+
+def dm_unic(df):
+    
+    d_dx_dm = df[df['dm_cie']==1][['cx_curp','fecha_consulta','dm_cie']].\
+                              sort_values(by = ['cx_curp','fecha_consulta'])
+    d_dx_dm_u = d_dx_dm.groupby('cx_curp').first()
+    
+    df_dx_dm = df.drop_duplicates(subset=['cx_curp','año_dx_dm'])[['cx_curp','año_dx_dm']]
+    df_dx_dm = df_dx_dm.loc[df_dx_dm['año_dx_dm'].notnull()]
+    df_dx_dm.sort_values(by=['cx_curp','año_dx_dm'])
+    
+    pru2 = pd.merge(d_dx_dm_u, df_dx_dm, on = ["cx_curp"], how="left")
+    pru2["año_dx_dm2"] = pru2["año_dx_dm"]
+    
+    pru2['año_dx_dm3'] = pd.DatetimeIndex(pru2['fecha_consulta']).year
+
+    for i in range(len(pru2['cx_curp'])):
+        x = pru2['año_dx_dm'][i]
+        y = pru2['año_dx_dm3'][i]
+
+        if (pd.isna(x)):
+            pru2['año_dx_dm'][i] = pru2['año_dx_dm3'][i]
+        elif x < y:
+            pru2['año_dx_dm'][i] = pru2['año_dx_dm'][i]
+
+    pru2 = pru2.drop(['año_dx_dm2','año_dx_dm3'], axis=1)
+
+    pru = df.copy()
+    pru = pd.merge(pru, pru2, on = ["cx_curp",'fecha_consulta'], how="left")
+    pru[~pd.isna(pru["dm_cie_y"])][["cx_curp",'fecha_consulta',\
+                                    'dm_cie_x','año_dx_dm_x','dm_cie_y','año_dx_dm_y']]
+    
+    pru.rename(columns = {'dm_cie_x':'dm_cie','dm_cie_y':'dm_cie_unic'}, inplace = True)
+    
+    pru = pd.merge(pru, pru2, on = ["cx_curp"], how="left")
+    
+    pru = pru.drop(['año_dx_dm_y'], axis=1)
+    
+    # Actualiza dm seguimiento
+    pru['dm_cie_unic'] = np.where((pru['year_consulta']>=pru['año_dx_dm_x'])|
+                                  ((pd.isna(pru['dm_cie_unic']))&(pru['fecha_consulta_x']>=pru['fecha_consulta_y'])),\
+                                 1, pru['dm_cie_unic'])
+    pru.sort_values(by=['cx_curp','fecha_consulta_x'])[['cx_curp','dm_cie_x','dm_cie_y','dm_cie_unic',\
+                                                        'fecha_consulta_x','fecha_consulta_y','año_dx_dm_x',\
+                                                        'year_consulta']]
+
+    pru[pru['año_dx_dm_x']==pru['year_consulta']][['cx_curp','dm_cie_x','dm_cie_y','dm_cie_unic',\
+                                                        'fecha_consulta_x','fecha_consulta_y','año_dx_dm_x',\
+                                                        'year_consulta']]
+    
+    
+    
+    pru[pru['año_dx_dm_x']==pru['year_consulta']][['cx_curp','dm_cie_x','dm_cie_y','dm_cie_unic',\
+                                                    'fecha_consulta_x','fecha_consulta_y','año_dx_dm_x',\
+                                                    'year_consulta']]
+    
+    
+    pru['año_dx_dm'] = np.where((pd.isna(pru['dm_cie_unic'])),\
+                             np.nan, 
+                             pru['año_dx_dm'])
+    pru['año_dx_dm'] = np.where(pru['fecha_consulta_x']<pru['fecha_consulta_y'],\
+                             np.nan, 
+                             pru['año_dx_dm'])
+    pru['dm_cie_unic'] = np.where(pru['fecha_consulta_x']<pru['fecha_consulta_y'],\
+                             np.nan, 
+                             pru['dm_cie_unic'])
+    pru['año_dx_dm'] = np.where((pd.isna(pru['dm_cie_unic']))&(pru['año_dx_dm_x']<pru['year_consulta']),\
+                             pru['año_dx_dm_x'], 
+                             pru['año_dx_dm'])
+    pru['dm_cie_unic'] = np.where((pd.isna(pru['dm_cie_unic']))&(pru['año_dx_dm_x']<pru['year_consulta']),\
+                             1, 
+                             pru['dm_cie_unic'] )
+    
+    # Calcula años con dx
+    pru['dm_años_int'] = np.where((~pd.isna(pru['dm_cie_unic'])),\
+                             (pru.year_consulta - pru.año_dx_dm),
+                             np.nan)
+    
+    
+    pru = pru.drop(['dm_cie_y','año_dx_dm_x'], axis=1)
+    pru.rename(columns = {'dm_cie_x':'dm_cie'}, inplace = True)
+    
+    
+    # Calcula años con dx desde el primer dx en base de datos
+    pru['dm_años_flt_ini_db_dx'] = np.where((~pd.isna(pru['dm_cie_unic'])),\
+                             (pru['fecha_consulta_x'] - pru['fecha_consulta_y']) / np.timedelta64(1, 'Y'), 
+                             np.nan)
+    # Calcula años con dx desde el primer dx en base de datos
+    pru['dm_años_int_ini_db_dx'] = np.where((~pd.isna(pru['dm_cie_unic'])),\
+                             (pru.fecha_consulta_x - pru.fecha_consulta_y).astype('timedelta64[Y]').astype('int'),
+                             np.nan)
+
+    pru['dm_años_flt_ini_db_dx'] = np.where(pru['dm_años_flt_ini_db_dx']<0,\
+                             np.nan, 
+                             pru['dm_años_flt_ini_db_dx'])
+    pru['dm_años_int_ini_db_dx'] = np.where(pru['dm_años_int_ini_db_dx']<0,\
+                             np.nan, 
+                             pru['dm_años_int_ini_db_dx'])
+    
+    
+    pru.rename(columns = {'fecha_consulta_x':'fecha_consulta','fecha_consulta_y':'fecha_dm_dx'}, inplace = True)
+    pru['fecha_dm_dx'] = np.where(pd.isna(pru['dm_años_int_ini_db_dx']), np.datetime64('NaT'), pru['fecha_dm_dx'])
+    
+    df = pru.copy()
+    
+    return df
+
+
+def hta_unic(df):
+    
+    d_dx_hta = df[df['hta_cie']==1][['cx_curp','fecha_consulta','hta_cie']].\
+                              sort_values(by = ['cx_curp','fecha_consulta'])
+    d_dx_hta_u = d_dx_hta.groupby('cx_curp').first()
+    
+    df_dx_hta = df.drop_duplicates(subset=['cx_curp','año_dx_hta'])[['cx_curp','año_dx_hta']]
+    df_dx_hta = df_dx_hta.loc[df_dx_hta['año_dx_hta'].notnull()]
+    df_dx_hta.sort_values(by=['cx_curp','año_dx_hta'])
+    
+    pru2 = pd.merge(d_dx_hta_u, df_dx_hta, on = ["cx_curp"], how="left")
+    pru2["año_dx_hta2"] = pru2["año_dx_hta"]
+    
+    pru2['año_dx_hta3'] = pd.DatetimeIndex(pru2['fecha_consulta']).year
+    
+    for i in range(len(pru2['cx_curp'])):
+        x = pru2['año_dx_hta'][i]
+        y = pru2['año_dx_hta3'][i]
+
+        if (pd.isna(x)):
+            pru2['año_dx_hta'][i] = pru2['año_dx_hta3'][i]
+        elif x < y:
+            pru2['año_dx_hta'][i] = pru2['año_dx_hta'][i]
+
+    pru2 = pru2.drop(['año_dx_hta2','año_dx_hta3'], axis=1)
+    
+    pru = df.copy()
+    pru = pd.merge(pru, pru2, on = ["cx_curp",'fecha_consulta'], how="left")
+    
+    pru.rename(columns = {'hta_cie_x':'hta_cie','hta_cie_y':'hta_cie_unic'}, inplace = True)
+    
+    pru = pd.merge(pru, pru2, on = ["cx_curp"], how="left")
+    
+    pru = pru.drop(['año_dx_hta_y'], axis=1)
+    
+    # Actualiza hta seguimiento
+    pru['hta_cie_unic'] = np.where((pru['year_consulta']>=pru['año_dx_hta_x'])|
+                                  ((pd.isna(pru['hta_cie_unic']))&(pru['fecha_consulta_x']>=pru['fecha_consulta_y'])),\
+                                 1, pru['hta_cie_unic'])
+    pru.sort_values(by=['cx_curp','fecha_consulta_x'])[['cx_curp','hta_cie_x','hta_cie_y','hta_cie_unic',\
+                                                        'fecha_consulta_x','fecha_consulta_y','año_dx_hta_x',\
+                                                        'year_consulta']]
+
+    pru[pru['año_dx_hta_x']==pru['year_consulta']][['cx_curp','hta_cie_x','hta_cie_y','hta_cie_unic',\
+                                                        'fecha_consulta_x','fecha_consulta_y','año_dx_hta_x',\
+                                                        'year_consulta']]
+    
+    
+    pru['año_dx_hta'] = np.where((pd.isna(pru['hta_cie_unic'])),\
+                             np.nan, 
+                             pru['año_dx_hta'])
+    pru['año_dx_hta'] = np.where(pru['fecha_consulta_x']<pru['fecha_consulta_y'],\
+                             np.nan, 
+                             pru['año_dx_hta'])
+    pru['hta_cie_unic'] = np.where(pru['fecha_consulta_x']<pru['fecha_consulta_y'],\
+                             np.nan, 
+                             pru['hta_cie_unic'])
+    pru['año_dx_hta'] = np.where((pd.isna(pru['hta_cie_unic']))&(pru['año_dx_hta_x']<pru['year_consulta']),\
+                             pru['año_dx_hta_x'], 
+                             pru['año_dx_hta'])
+    pru['hta_cie_unic'] = np.where((pd.isna(pru['hta_cie_unic']))&(pru['año_dx_hta_x']<pru['year_consulta']),\
+                             1, 
+                             pru['hta_cie_unic'] )
+    
+    
+    pru = pru.drop(['hta_cie_y','año_dx_hta_x'], axis=1)
+    pru.rename(columns = {'hta_cie_x':'hta_cie'}, inplace = True)
+    
+    # Calcula años con dx desde el primer dx en base de datos
+    pru['hta_años_flt_ini_db_dx'] = np.where((~pd.isna(pru['hta_cie_unic'])),\
+                             (pru['fecha_consulta_x'] - pru['fecha_consulta_y']) / np.timedelta64(1, 'Y'), 
+                             np.nan)
+    # Calcula años con dx desde el primer dx en base de datos
+    pru['hta_años_int_ini_db_dx'] = np.where((~pd.isna(pru['hta_cie_unic'])),\
+                             (pru.fecha_consulta_x - pru.fecha_consulta_y).astype('timedelta64[Y]').astype('int'),
+                             np.nan)
+
+    pru['hta_años_flt_ini_db_dx'] = np.where(pru['hta_años_flt_ini_db_dx']<0,\
+                             np.nan, 
+                             pru['hta_años_flt_ini_db_dx'])
+    pru['hta_años_int_ini_db_dx'] = np.where(pru['hta_años_int_ini_db_dx']<0,\
+                             np.nan, 
+                             pru['hta_años_int_ini_db_dx'])  
+    
+    # Calcula años con dx
+    pru['hta_años_int'] = np.where((~pd.isna(pru['hta_cie_unic'])),\
+                             (pru.year_consulta - pru.año_dx_hta),
+                             np.nan)
+    
+    pru.rename(columns = {'fecha_consulta_x':'fecha_consulta','fecha_consulta_y':'fecha_hta_dx'}, inplace = True)
+    
+    pru['fecha_hta_dx'] = np.where(pd.isna(pru['hta_años_int_ini_db_dx']), np.datetime64('NaT'), pru['fecha_hta_dx'])
+
+    
+    df = pru.copy()
+    df['fecha_consulta']= pd.to_datetime(df['fecha_consulta'])
+    df['FechaNuevaHipertension']= pd.to_datetime(df['FechaNuevaHipertension'])
+
+    
+    df['hta_nvo_ce'] = np.where(df['fecha_consulta']>=df['FechaNuevaHipertension'],1,0)
+    df['fecha_hta_nvo'] = np.where(df['fecha_consulta']>=df['FechaNuevaHipertension'],df['FechaNuevaHipertension'],\
+                                   np.datetime64('NaT'))
+    df['año_hta_nvo'] = pd.DatetimeIndex(df['FechaNuevaHipertension']).year
+
+    # Calcula años con dx desde el primer dx en base de datos
+    df['hta_años_flt'] = np.where((~pd.isna(df['año_hta_nvo'])),\
+                             (df['fecha_consulta'] - df['FechaNuevaHipertension']) / np.timedelta64(1, 'Y'), 
+                             np.nan)
+    # Calcula años con dx desde el primer dx en base de datos
+    df['hta_años_int'] = np.where((~pd.isna(df['año_hta_nvo'])),\
+                             (df.fecha_consulta - df.FechaNuevaHipertension).astype('timedelta64[Y]').astype('int'),
+                             np.nan)
+
+    df['año_hta_nvo'] = np.where(df['hta_años_int']<0,np.nan,df['año_hta_nvo'])
+    df['hta_años_flt'] = np.where(df['hta_años_int']<0,np.nan,df['hta_años_flt'])
+    df['hta_años_int'] = np.where(df['hta_años_int']<0,np.nan,df['hta_años_int'])
+
+    df.drop('FechaNuevaHipertension', inplace=True, axis=1)  
+    
+    return df
+
+
+def renal_unic(df):
+    
+    d_dx_renal = df[df['renal_cie']==1][['cx_curp','fecha_consulta','renal_cie']].\
+                              sort_values(by = ['cx_curp','fecha_consulta'])
+    d_dx_renal_u = d_dx_renal.groupby('cx_curp').first()
+    
+    df = pd.merge(df, d_dx_renal_u, on = ["cx_curp",'fecha_consulta'], how="left")
+    df.rename(columns = {'renal_cie_x':'renal_cie','renal_cie_y':'renal_cie_unic'}, inplace = True)
+    df = pd.merge(df, d_dx_renal_u, on = ["cx_curp"], how="left")
+    # Actualiza renal seguimiento
+    df['renal_cie_unic'] = np.where((pd.isna(df['renal_cie_unic']))&(df['fecha_consulta_x']>=df['fecha_consulta_y']),\
+                                 2, df['renal_cie_unic'])
+    # Calcula años con dx
+    df['renal_años_flt'] = np.where((~pd.isna(df['renal_cie_unic'])),\
+                             (df['fecha_consulta_x'] - df['fecha_consulta_y']) / np.timedelta64(1, 'Y'), 
+                             np.nan)
+    
+    df['renal_años_flt'] = df['renal_años_flt'].fillna(0) 
+    df['renal_años_int'] = df['renal_años_flt'].astype('int')
+    
+    df.rename(columns = {'renal_cie_x':'renal_cie','fecha_consulta_x':'fecha_consulta'}, inplace = True)
+    df.drop('fecha_consulta_y', inplace=True, axis=1)
+    df.drop('renal_cie_y', inplace=True, axis=1)
+    
+    return df
+
+
+def proporciones(df):
+    
+    df_aux = df.copy()
+    df_aux['sexo_n'] = ""
+    df_aux['edad_c'] = ""
+
+    for i in range(len(df_aux['newid'])):  
+
+        if pd.isna(df_aux['glucosa1'][i]):        
+            df_aux['glucosa1'][i] = 'NaN'        
+        else:        
+            df_aux['glucosa1'][i] = 'Value'
+
+        if pd.isna(df_aux['glucosa2'][i]):
+            df_aux['glucosa2'][i] = 'NaN'        
+        else:        
+            df_aux['glucosa2'][i] = 'Value'
+
+        if pd.isna(df_aux['sistolica'][i]):        
+            df_aux['sistolica'][i] = 'NaN'        
+        else:        
+            df_aux['sistolica'][i] = 'Value'
+
+        if pd.isna(df_aux['diastolica'][i]):
+            df_aux['diastolica'][i] = 'NaN'        
+        else:        
+            df_aux['diastolica'][i] = 'Value'
+
+        if pd.isna(df_aux['colesterol'][i]):        
+            df_aux['colesterol'][i] = 'NaN'        
+        else:        
+            df_aux['colesterol'][i] = 'Value'
+
+        if pd.isna(df_aux['trigliceridos'][i]):
+            df_aux['trigliceridos'][i] = 'NaN'        
+        else:        
+            df_aux['trigliceridos'][i] = 'Value'
+
+        if pd.isna(df_aux['hdl'][i]):        
+            df_aux['hdl'][i] = 'NaN'        
+        else:        
+            df_aux['hdl'][i] = 'Value'
+
+        if pd.isna(df_aux['ldl'][i]):
+            df_aux['ldl'][i] = 'NaN'        
+        else:        
+            df_aux['ldl'][i] = 'Value'
+
+        if pd.isna(df_aux['hba1c'][i]):        
+            df_aux['hba1c'][i] = 'NaN'        
+        else:        
+            df_aux['hba1c'][i] = 'Value'
+
+        if pd.isna(df_aux['plaquetas'][i]):
+            df_aux['plaquetas'][i] = 'NaN'        
+        else:        
+            df_aux['plaquetas'][i] = 'Value'
+
+        if pd.isna(df_aux['creatinina'][i]):        
+            df_aux['creatinina'][i] = 'NaN'        
+        else:        
+            df_aux['creatinina'][i] = 'Value'
+
+        if pd.isna(df_aux['acido_urico'][i]):
+            df_aux['acido_urico'][i] = 'NaN'        
+        else:        
+            df_aux['acido_urico'][i] = 'Value'
+
+        if pd.isna(df_aux['urea'][i]):        
+            df_aux['urea'][i] = 'NaN'        
+        else:        
+            df_aux['urea'][i] = 'Value'
+
+        if pd.isna(df_aux['peso'][i]):
+            df_aux['peso'][i] = 'NaN'        
+        else:        
+            df_aux['peso'][i] = 'Value'
+
+        if pd.isna(df_aux['altura'][i]):        
+            df_aux['altura'][i] = 'NaN'        
+        else:        
+            df_aux['altura'][i] = 'Value'
+
+        if pd.isna(df_aux['tfg'][i]):
+            df_aux['tfg'][i] = 'NaN'        
+        else:        
+            df_aux['tfg'][i] = 'Value'
+
+        if pd.isna(df_aux['imc'][i]):        
+            df_aux['imc'][i] = 'NaN'        
+        else:        
+            df_aux['imc'][i] = 'Value'
+
+        if pd.isna(df_aux['in_consulta'][i]):
+            df_aux['in_consulta'][i] = 'NaN'        
+        else:        
+            df_aux['in_consulta'][i] = 'Value'
+
+        if pd.isna(df_aux['fecha_nacimiento'][i]):        
+            df_aux['fecha_nacimiento'][i] = 'NaN'        
+        else:        
+            df_aux['fecha_nacimiento'][i] = 'Value'
+
+        if pd.isna(df_aux['sexo'][i]):
+            df_aux['sexo_n'][i] = 'NaN'        
+        else:        
+            df_aux['sexo_n'][i] = 'Value'
+
+        if pd.isna(df_aux['edad'][i]):
+            df_aux['edad_c'][i] = 'NaN'        
+        else:        
+            df_aux['edad_c'][i] = 'Value'
+
+        if pd.isna(df_aux['año_dx_dm'][i]):
+            df_aux['año_dx_dm'][i] = 'NaN'        
+        else:        
+            df_aux['año_dx_dm'][i] = 'Value'
+
+        if pd.isna(df_aux['año_dx_hta'][i]):        
+            df_aux['año_dx_hta'][i] = 'NaN'        
+        else:        
+            df_aux['año_dx_hta'][i] = 'Value'
+
+        if pd.isna(df_aux['year_consulta'][i]):        
+            df_aux['year_consulta'][i] = 'NaN'        
+        else:        
+            df_aux['year_consulta'][i] = 'Value'
+        
+    return df_aux
+
+
 def lista_mex_enf(df):
     """
     Agrupa dx de acuerdo a lista mexicana

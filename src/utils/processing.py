@@ -24,7 +24,7 @@ def laboratories(df):
     
     return df
 
-def cod_medicamento(df):
+def cod_medicamento(df_m,df):
     """
     """
     df['cod_med'] = np.nan
@@ -64,6 +64,32 @@ def edad_range(df):
     return df
     
     
+def edad_range_e(edad):
+    e_r = np.nan
+    if (edad <  11): 
+        e_r = 1 #'hasta 10 años'
+    elif (edad > 10) & (edad <= 20):
+        e_r = 2 #'11-20'
+    elif (edad > 20) & (edad <= 30): 
+        e_r = 3 #'21-30'
+    elif (edad > 30) & (edad <= 40): 
+        e_r = 4 #'31-40'
+    elif (edad > 40) & (edad <= 50): 
+        e_r = 5 #'41-50'
+    elif (edad > 50) & (edad <= 60): 
+        e_r = 6 #'51-60'
+    elif (edad > 60) & (edad <= 70): 
+        e_r = 7 #'61-70'
+    elif (edad > 70) & (edad <= 80): 
+        e_r = 8 #'71-80'
+    elif (edad > 80) & (edad <= 90): 
+        e_r = 9 #'81-90'
+    elif (edad > 90  ): 
+        e_r = 10 #'91 y más'
+ 
+    return e_r
+    
+    
 def epoca_nac(df):
     df["year_nac"] = pd.DatetimeIndex(df['fecha_nacimiento']).year
     df["epoca_nac"] = np.nan
@@ -91,12 +117,40 @@ def epoca_nac(df):
             elif(x>1980 and x<= 1990):
                 df["epoca_nac"][i] = 8
             elif(x>1990 and x<= 2000):
-               df["epoca_nac"][i] = 9
+                df["epoca_nac"][i] = 9
             else:
-               df["epoca_nac"][i] = 10
+                df["epoca_nac"][i] = 10
         
     return df
 
+
+
+def epoca_nac_a(anio):
+    e_a = np.nan
+    if(anio<=1910):
+        e_a = 0
+    elif(anio>1910 and anio<= 1920):
+        e_a = 1
+    elif(anio>1920 and anio<= 1930):
+        e_a = 2
+    elif(anio>1930 and anio<= 1940):
+        e_a = 3
+    elif(anio>1940 and anio<= 1950):
+        e_a = 4
+    elif(anio>1950 and anio<= 1960):
+        e_a = 5
+    elif(anio>1960 and anio<= 1970):
+        e_a = 6
+    elif(anio>1970 and anio<= 1980):
+        e_a = 7
+    elif(anio>1980 and anio<= 1990):
+        e_a = 8
+    elif(anio>1990 and anio<= 2000):
+        e_a = 9
+    else:
+        e_a = 10
+        
+    return e_a
 
 def imc_calculo_range(df):
     df["imc_range"] = np.nan
@@ -105,6 +159,57 @@ def imc_calculo_range(df):
     df.loc[(df['imc_calculado'] >= 25  ) & (df['imc_calculado'] < 30), 'imc_range'] = 3#'Sobrepeso'
     df.loc[(df['imc_calculado'] >= 30  ), 'imc_range'] = 4#'Obesidad'
     return df
+
+
+def imc_calculo_range_imc(imc):
+    #imc = imc.iloc[0]
+    range_imc = np.nan
+    #print("imc -> ",imc)
+    if (imc < 18.5):
+        range_imc = 1#'Bajo peso'
+    elif (imc >= 18.5) & (imc < 25):
+        range_imc = 2#'Peso normal'
+    elif (imc >= 25  ) & (imc < 30):
+        range_imc = 3#'Sobrepeso'
+    elif (imc >= 30  ):
+        range_imc = 4#'Obesidad Grado 3'
+        
+    return range_imc
+
+
+def dias_year(date):
+    days = np.nan
+    p = pd.Period(date)
+    if p.is_leap_year:
+        days = 366
+    else:
+        days = 365
+        
+    return days
+
+
+def fecha_ini_fin(fecha_ini):
+    # Crear variable de ventanas máximas o hacer referencia a la variable años de conuslta
+    fecha_ini = pd.to_datetime(fecha_ini)
+    fecha_ini = pd.Timestamp(fecha_ini)
+    
+    a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
+    a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
+    a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
+    
+    i = a_ini.strftime('%Y-%m-%d')
+    i_t = a_inter.strftime('%Y-%m-%d')
+    f = a_fin.strftime('%Y-%m-%d')
+    
+    i = dias_year(i)
+    i_t = dias_year(i_t)
+    f = dias_year(f)    
+    
+    a_ini = fecha_ini+pd.to_timedelta(i, unit = 'D')
+    a_inter = fecha_ini+pd.to_timedelta(i+i_t, unit = 'D')
+    a_fin = fecha_ini+pd.to_timedelta(i+i_t+f, unit = 'D')
+    
+    return a_ini, a_inter, a_fin
 
 
 def ventana_ini_consulta(df):
@@ -1309,11 +1414,11 @@ def lista_mex_enf(df):
                              df["codigos_cie"].str.contains('I51')|
                              df["codigos_cie"].str.contains('I52'), 1, 0)  
     
-    df['I60'] = np.where(df["codigos_cie"].str.contains('I6'), 1, 0) 
+    df['I6'] = np.where(df["codigos_cie"].str.contains('I6'), 1, 0) 
     
-    df['I70'] = np.where(df["codigos_cie"].str.contains('I7'), 1, 0) 
+    df['I7'] = np.where(df["codigos_cie"].str.contains('I7'), 1, 0) 
     
-    df['I80'] = np.where(df["codigos_cie"].str.contains('I8'), 1, 0) 
+    df['I8'] = np.where(df["codigos_cie"].str.contains('I8'), 1, 0) 
     
     df['I95_I99'] = np.where(df["codigos_cie"].str.contains('I95')|
                              df["codigos_cie"].str.contains('I96')|
@@ -1348,7 +1453,38 @@ def lista_mex_enf(df):
     df['I52'] = np.where(df["codigos_cie"].str.contains('I52'), 1, 0) 
     df['I95'] = np.where(df["codigos_cie"].str.contains('I95'), 1, 0) 
     
+    # SIGNOS Y SÍNTOMAS
+    df['R00'] = np.where(df["codigos_cie"].str.contains('R00'), 1, 0)
+    df['R01'] = np.where(df["codigos_cie"].str.contains('R01'), 1, 0)
+    df['R02'] = np.where(df["codigos_cie"].str.contains('R02'), 1, 0)
+    df['R03'] = np.where(df["codigos_cie"].str.contains('R03'), 1, 0)
+    df['R04'] = np.where(df["codigos_cie"].str.contains('R04'), 1, 0)
+    df['R05'] = np.where(df["codigos_cie"].str.contains('R05'), 1, 0)
+    df['R06'] = np.where(df["codigos_cie"].str.contains('R06'), 1, 0)
+    df['R07'] = np.where(df["codigos_cie"].str.contains('R07'), 1, 0)
+    df['R08'] = np.where(df["codigos_cie"].str.contains('R08'), 1, 0)
+    df['R09'] = np.where(df["codigos_cie"].str.contains('R09'), 1, 0)
     
+    df['R1'] = np.where(df["codigos_cie"].str.contains('R1'), 1, 0)
+    df['R20_R23'] = np.where(df["codigos_cie"].str.contains('R20')|
+                             df["codigos_cie"].str.contains('R21')|
+                             df["codigos_cie"].str.contains('R22')|
+                             df["codigos_cie"].str.contains('R23'), 1, 0)
+    df['R25_R29'] = np.where(df["codigos_cie"].str.contains('R25')|
+                             df["codigos_cie"].str.contains('R26')|
+                             df["codigos_cie"].str.contains('R27')|
+                             df["codigos_cie"].str.contains('R29'), 1, 0)
+    df['R3'] = np.where(df["codigos_cie"].str.contains('R3'), 1, 0)
+    df['R40_R46'] = np.where(df["codigos_cie"].str.contains('R40')|
+                             df["codigos_cie"].str.contains('R41')|
+                             df["codigos_cie"].str.contains('R42')|
+                             df["codigos_cie"].str.contains('R43')|
+                             df["codigos_cie"].str.contains('R44')|
+                             df["codigos_cie"].str.contains('R45')|
+                             df["codigos_cie"].str.contains('R46'), 1, 0)
+    df['R47_R49'] = np.where(df["codigos_cie"].str.contains('R47')|
+                             df["codigos_cie"].str.contains('R48')|
+                             df["codigos_cie"].str.contains('R49'), 1, 0)
     
     # ----------------------------------------------------------------------------------------------------------
     df["enf_inf_intestinales"] = df['enf_inf_intestinales'].astype('category')
@@ -1513,9 +1649,9 @@ def lista_mex_enf(df):
     df['I20_I25'] = df['I20_I25'].astype('category')
     df['I26_I28'] = df['I26_I28'].astype('category')
     df['I30_I52'] = df['I30_I52'].astype('category')
-    df['I60_I69'] = df['I60_I69'].astype('category')
-    df['I70_I79'] = df['I70_I79'].astype('category')
-    df['I80_I89'] = df['I80_I89'].astype('category')
+    df['I6'] = df['I6'].astype('category')
+    df['I7'] = df['I7'].astype('category')
+    df['I8'] = df['I8'].astype('category')
     df['I95_I99'] = df['I95_I99'].astype('category')
     
     df['I26'] = df['I26'].astype('category')
@@ -1537,7 +1673,6 @@ def lista_mex_enf(df):
     df['I43'] = df['I43'].astype('category')
     df['I44'] = df['I44'].astype('category')
     df['I45'] = df['I45'].astype('category')
-    df['I46'] = df['I46'].astype('category')
     df['I47'] = df['I47'].astype('category')
     df['I48'] = df['I48'].astype('category')
     df['I49'] = df['I49'].astype('category')
@@ -1545,6 +1680,24 @@ def lista_mex_enf(df):
     df['I51'] = df['I51'].astype('category')
     df['I52'] = df['I52'].astype('category')
     
+    
+    df['R00'] = df['R00'].astype('category')
+    df['R01'] = df['R01'].astype('category')
+    df['R02'] = df['R02'].astype('category')
+    df['R03'] = df['R03'].astype('category')
+    df['R04'] = df['R04'].astype('category')
+    df['R05'] = df['R05'].astype('category')
+    df['R06'] = df['R06'].astype('category')
+    df['R07'] = df['R07'].astype('category')
+    df['R08'] = df['R08'].astype('category')
+    df['R09'] = df['R09'].astype('category')
+    df['R1'] = df['R1'].astype('category')
+    
+    df['R20_R23'] = df['R20_R23'].astype('category')
+    df['R25_R29'] = df['R25_R29'].astype('category')
+    df['R3'] = df['R3'].astype('category')
+    df['R40_R46'] = df['R40_R46'].astype('category')
+    df['R47_R49'] = df['R47_R49'].astype('category')
     
     return df
 

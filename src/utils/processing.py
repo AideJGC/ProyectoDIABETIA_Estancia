@@ -188,15 +188,20 @@ def dias_year(date):
     return days
 
 
+
 def fecha_ini_fin(fecha_ini):
     # Crear variable de ventanas máximas o hacer referencia a la variable años de conuslta
     fecha_ini = pd.to_datetime(fecha_ini)
     fecha_ini = pd.Timestamp(fecha_ini)
     
-    a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
-    a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
-    a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
+    #a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
+    #a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
+    #a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
     
+    a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
+    a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
+    a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')
+    """
     i = a_ini.strftime('%Y-%m-%d')
     i_t = a_inter.strftime('%Y-%m-%d')
     f = a_fin.strftime('%Y-%m-%d')
@@ -204,6 +209,12 @@ def fecha_ini_fin(fecha_ini):
     i = dias_year(i)
     i_t = dias_year(i_t)
     f = dias_year(f)    
+    """
+    
+    i = 45
+    i_t = 90
+    f = 30 
+    
     
     a_ini = fecha_ini+pd.to_timedelta(i, unit = 'D')
     a_inter = fecha_ini+pd.to_timedelta(i+i_t, unit = 'D')
@@ -256,38 +267,6 @@ def ventana_entre_lab(df):# pendiente si se quita
     return df
 """    
 
-def dias_year(date):
-    days = np.nan
-    p = pd.Period(date)
-    if p.is_leap_year:
-        days = 366
-    else:
-        days = 365
-        
-    return days
-
-def fecha_ini_fin(fecha_ini):
-    # Crear variable de ventanas máximas o hacer referencia a la variable años de conuslta
-    fecha_ini = pd.to_datetime(fecha_ini)
-    fecha_ini = pd.Timestamp(fecha_ini)
-    
-    a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
-    a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
-    a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
-    
-    i = a_ini.strftime('%Y-%m-%d')
-    i_t = a_inter.strftime('%Y-%m-%d')
-    f = a_fin.strftime('%Y-%m-%d')
-    
-    i = dias_year(i)
-    i_t = dias_year(i_t)
-    f = dias_year(f)    
-    
-    a_ini = fecha_ini+pd.to_timedelta(i, unit = 'D')
-    a_inter = fecha_ini+pd.to_timedelta(i+i_t, unit = 'D')
-    a_fin = fecha_ini+pd.to_timedelta(i+i_t+f, unit = 'D')
-    
-    return a_ini, a_inter, a_fin
 
 
 def dm_unic(df):

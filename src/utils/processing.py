@@ -1476,62 +1476,9 @@ def lista_mex_enf(df):
 
 def medicine_cat(df,df_m):
     """Convert a number into a human readable format."""
-    
-    #df_m = pd.read_csv("../Data/medicamentos.csv", encoding='ISO-8859-1')
-    
-    #df_m = df_m.drop(['id','Grupo','Producto_Activo','Cve_Med.1','Cve_Med','GPO','GPO1','ESP','DIF',
-    #                  'VAR','CUADRO_BASICO_SAI','PROGRAMA_MEDICO','Unidades', 'Medida','GRUPO'], axis=1)
-    
-    df['ANALGESIACOS_ANTIINFLAMATORIOS_ANTIRREUMATICOS'] = 0    
-    df['ANALGESICOS_OPIOIDES___'] = 0
-    df['ANALGESICOS_ANTIPIRETICOS'] = 0
-    df['ANESTESICOS_GENERATES'] = 0
-    df['ANESTESICOS_LOCALES'] = 0
-    df['ANSIOLITICOS'] = 0
-    df['ANTIACIDOS'] = 0
-    df['ANTIAGREGANTE_PLAQUETARIO'] = 0
-    df['ANTIANEMICOS'] = 0
-    df['ANTIANGINOSO'] = 0
-    df['ANTIARRITMICOS'] = 0
-    df['ANTIASMATICO__BRONCODILATADOR'] = 0
-    df['ANTIBIOTICOS'] = 0
-    df['ANTICONCEPTIVO_INTRAUTERINO'] = 0
-    df['ANTIDEPRESIVOS'] = 0
-    df['ANTIDIABETICOS'] = 0
-    df['ANTIDIARREICOS'] = 0
-    df['ANTIDOTOS'] = 0
-    df['ANTIEMETICOS'] = 0
-    df['ANTIEPILEPTICOS'] = 0
-    df['ANTIESPASMODICO'] = 0
-    df['ANTIFUNGICOS'] = 0
-    df['ANTIGOTOSOS'] = 0
-    df['ANTIHEMORRAGICOS'] = 0
-    df['ANTIHISTAMINICOS'] = 0
-    df['ANTIPARKINSONIANO'] = 0
-    df['ANTIPSICOTICOS'] = 0
-    df['ANTISEPTICOS_DESINFECTANTES'] = 0
-    df['ANTITROMBITICO_TROMBOTICO_ANTIAGREGANTE'] = 0
-    df['ANTITROMBOTICO_TROMBOLITICO'] = 0
-    df['ANTITUSIVOS'] = 0
-    df['ANTIULCEROSOS_PROTECTOR_GASTRICO'] = 0
-    df['ANTIVIRALES'] = 0
-    df['CARDIOTONICOS'] = 0
-    df['CORTICOIDES'] = 0
-    df['DIURETICOS_ANTIHIPERTENSIVOS'] = 0
-    df['FACTOR_VITAMINICO'] = 0
-    df['HIPNOTICO_SEDANTE'] = 0
-    df['HIPOLIPEMIANTE'] = 0
-    df['INDUCTOR_DEL_PARTO'] = 0
-    df['INHIBIDOR_DEL_PARTO'] = 0
-    df['INMUNOSUPRESORES'] = 0
-    df['LAXANTES'] = 0
-    df['MUCOLITICOS'] = 0
-    df['OTROS_ANTIHIPERTENSIVOS'] = 0
-    df['RELAJANTE_MUSCULAR'] = 0
-    df['TERAPIA_TIROIDEA'] = 0
-    df['TRATAMIENTO_TUBERCULOSIS'] = 0
-    df['g1_ANALGESICOS'] = 0
-    df['g2_ANESTESIA'] = 0
+      
+    df['g1'] = 0
+    df['g2'] = 0
     df['g3'] = 0
     df['g4'] = 0
     df['g5'] = 0
@@ -1553,44 +1500,6 @@ def medicine_cat(df,df_m):
     df['g21'] = 0
     df['g22'] = 0
     df['g23'] = 0
-    df['ANALGESICOS_URINARIOS'] = 0
-    df['ANTIAGREGANTES_PLAQUETARIOS'] = 0
-    df['ANTIALERGICOS'] = 0
-    df['ANTIANDROGENICOS'] = 0
-    df['ANTIARRITMICOS.1'] = 0
-    df['ANTICOAGULANTES_ORALES'] = 0
-    df['ANTIDEPRESIVOS.1'] = 0
-    df['ANTIFLAMATORIOS_ESTEROIDEOS'] = 0
-    df['ANTIHIPERTENSIVOS'] = 0
-    df['ANTIINFLAMATORIOS_NO_ESTEROIDEOS'] = 0
-    df['ANTIMICOTICOS_SISTEMICOS_Y_TOPICOS'] = 0
-    df['ANTIMUSCARINICOS'] = 0
-    df['ANTINEURITICOS'] = 0
-    df['ANTITUSIVOS.1'] = 0
-    df['ANTIULCEROSOS_Y_PROTECTORES_DE_LA_MUCOSA_GASTRICA'] = 0
-    df['ANTIURICOSURICOS'] = 0
-    df['ANTIVERTIGINOSOS'] = 0
-    df['BENZODIAZEPINAS'] = 0
-    df['BLOQUEADORES_ALFA'] = 0
-    df['BRONCODILATADORES_Y_EXPECTORANTES'] = 0
-    df['DISFUNCION_ERECTIL'] = 0
-    df['ELECTROLITOS_ORALES'] = 0
-    df['FARMACOS_INSUFICIENCIA_CARDIACA_Y_ANTIANGINOSOS'] = 0
-    df['FARMACOS_MODIFICADORES_DE_LA_ENFERMEDAD'] = 0
-    df['FARMACOS_OCULARES'] = 0
-    df['FARMACOS_UTILIZADOS_EN_CANCER_DE_MAMA'] = 0
-    df['FARMACOS_UTILIZADOS_EN_HIPERTIROIDISMO'] = 0
-    df['FARMACOS_UTILIZADOS_EN_HIPOTIROIDISMO'] = 0
-    df['FARMACOS_UTILIZADOS_EN_NEFROLOGIA'] = 0
-    df['FARMACOS_UTILIZADOS_EN_NEUROLOGIA'] = 0
-    df['FARMACOS_UTILIZADOS_EN_OSTEOPOROSIS'] = 0
-    df['FARMACOS_UTILIZADOS_EN_PSIQUIATRIA'] = 0
-    df['FORMULAS_NUTRICIONALES_COMPLETAS'] = 0
-    df['HIPOLIPEMIANTES'] = 0
-    df['HORMONALES'] = 0
-    df['METILXANTINAS'] = 0
-    df['VARIOS'] = 0
-    df['VITAMINICOS'] = 0
     
     for i in range(len(df_m['ID_PRODUCTO'])):
         x = str(df_m['ID_PRODUCTO'][i])
@@ -1600,57 +1509,9 @@ def medicine_cat(df,df_m):
             #print(m)
             if(~pd.isna(m) and m!='nan'):
                 if x in str(m):
-            
-                    df['ANALGESIACOS_ANTIINFLAMATORIOS_ANTIRREUMATICOS'][j] = df_m['ANALGESIACOS_ANTIINFLAMATORIOS_ANTIRREUMATICOS'][i] + df['ANALGESIACOS_ANTIINFLAMATORIOS_ANTIRREUMATICOS'][j]
-                    df['ANALGESICOS_OPIOIDES___'][j] = df_m['ANALGESICOS_OPIOIDES___'][i] + df['ANALGESICOS_OPIOIDES___'][j]
-                    df['ANALGESICOS_ANTIPIRETICOS'][j] = df_m['ANALGESICOS_ANTIPIRETICOS'][i] + df['ANALGESICOS_ANTIPIRETICOS'][j]
-                    df['ANESTESICOS_GENERATES'][j] = df_m['ANESTESICOS_GENERATES'][i] + df['ANESTESICOS_GENERATES'][j]
-                    df['ANESTESICOS_LOCALES'][j] = df_m['ANESTESICOS_LOCALES'][i] + df['ANESTESICOS_LOCALES'][j]
-                    df['ANSIOLITICOS'][j] = df_m['ANSIOLITICOS'][i] + df['ANSIOLITICOS'][j]
-                    df['ANTIACIDOS'][j] = df_m['ANTIACIDOS'][i] + df['ANTIACIDOS'][j]
-                    df['ANTIAGREGANTE_PLAQUETARIO'][j] = df_m['ANTIAGREGANTE_PLAQUETARIO'][i] + df['ANTIAGREGANTE_PLAQUETARIO'][j]
-                    df['ANTIANEMICOS'][j] = df_m['ANTIANEMICOS'][i] + df['ANTIANEMICOS'][j]
-                    df['ANTIANGINOSO'][j] = df_m['ANTIANGINOSO'][i] + df['ANTIANGINOSO'][j]
-                    df['ANTIARRITMICOS'][j] = df_m['ANTIARRITMICOS'][i] + df['ANTIARRITMICOS'][j]
-                    df['ANTIASMATICO__BRONCODILATADOR'][j] = df_m['ANTIASMATICO__BRONCODILATADOR'][i] + df['ANTIASMATICO__BRONCODILATADOR'][j]
-                    df['ANTIBIOTICOS'][j] = df_m['ANTIBIOTICOS'][i] + df['ANTIBIOTICOS'][j]
-                    df['ANTICONCEPTIVO_INTRAUTERINO'][j] = df_m['ANTICONCEPTIVO_INTRAUTERINO'][i] + df['ANTICONCEPTIVO_INTRAUTERINO'][j]
-                    df['ANTIDEPRESIVOS'][j] = df_m['ANTIDEPRESIVOS'][i] + df['ANTIDEPRESIVOS'][j]
-                    df['ANTIDIABETICOS'][j] = df_m['ANTIDIABETICOS'][i] + df['ANTIDIABETICOS'][j]
-                    df['ANTIDIARREICOS'][j] = df_m['ANTIDIARREICOS'][i] + df['ANTIDIARREICOS'][j]
-                    df['ANTIDOTOS'][j] = df_m['ANTIDOTOS'][i] + df['ANTIDOTOS'][j]
-                    df['ANTIEMETICOS'][j] = df_m['ANTIEMETICOS'][i] + df['ANTIEMETICOS'][j]
-                    df['ANTIEPILEPTICOS'][j] = df_m['ANTIEPILEPTICOS'][i] + df['ANTIEPILEPTICOS'][j]
-                    df['ANTIESPASMODICO'][j] = df_m['ANTIESPASMODICO'][i] + df['ANTIESPASMODICO'][j]
-                    df['ANTIFUNGICOS'][j] = df_m['ANTIFUNGICOS'][i] + df['ANTIFUNGICOS'][j]
-                    df['ANTIGOTOSOS'][j] = df_m['ANTIGOTOSOS'][i] + df['ANTIGOTOSOS'][j]
-                    df['ANTIHEMORRAGICOS'][j] = df_m['ANTIHEMORRAGICOS'][i] + df['ANTIHEMORRAGICOS'][j]
-                    df['ANTIHISTAMINICOS'][j] = df_m['ANTIHISTAMINICOS'][i] + df['ANTIHISTAMINICOS'][j]
-                    df['ANTIPARKINSONIANO'][j] = df_m['ANTIPARKINSONIANO'][i] + df['ANTIPARKINSONIANO'][j]
-                    df['ANTIPSICOTICOS'][j] = df_m['ANTIPSICOTICOS'][i] + df['ANTIPSICOTICOS'][j]
-                    df['ANTISEPTICOS_DESINFECTANTES'][j] = df_m['ANTISEPTICOS_DESINFECTANTES'][i] + df['ANTISEPTICOS_DESINFECTANTES'][j]
-                    df['ANTITROMBITICO_TROMBOTICO_ANTIAGREGANTE'][j] = df_m['ANTITROMBITICO_TROMBOTICO_ANTIAGREGANTE'][i] + df['ANTITROMBITICO_TROMBOTICO_ANTIAGREGANTE'][j]
-                    df['ANTITROMBOTICO_TROMBOLITICO'][j] = df_m['ANTITROMBOTICO_TROMBOLITICO'][i] + df['ANTITROMBOTICO_TROMBOLITICO'][j]
-                    df['ANTITUSIVOS'][j] = df_m['ANTITUSIVOS'][i] + df['ANTITUSIVOS'][j]
-                    df['ANTIULCEROSOS_PROTECTOR_GASTRICO'][j] = df_m['ANTIULCEROSOS_PROTECTOR_GASTRICO'][i] + df['ANTIULCEROSOS_PROTECTOR_GASTRICO'][j]
-                    df['ANTIVIRALES'][j] = df_m['ANTIVIRALES'][i] + df['ANTIVIRALES'][j]
-                    df['CARDIOTONICOS'][j] = df_m['CARDIOTONICOS'][i] + df['CARDIOTONICOS'][j]
-                    df['CORTICOIDES'][j] = df_m['CORTICOIDES'][i] + df['CORTICOIDES'][j]
-                    df['DIURETICOS_ANTIHIPERTENSIVOS'][j] = df_m['DIURETICOS_ANTIHIPERTENSIVOS'][i] + df['DIURETICOS_ANTIHIPERTENSIVOS'][j]
-                    df['FACTOR_VITAMINICO'][j] = df_m['FACTOR_VITAMINICO'][i] + df['FACTOR_VITAMINICO'][j]
-                    df['HIPNOTICO_SEDANTE'][j] = df_m['HIPNOTICO_SEDANTE'][i] + df['HIPNOTICO_SEDANTE'][j]
-                    df['HIPOLIPEMIANTE'][j] = df_m['HIPOLIPEMIANTE'][i] + df['HIPOLIPEMIANTE'][j]
-                    df['INDUCTOR_DEL_PARTO'][j] = df_m['INDUCTOR_DEL_PARTO'][i] + df['INDUCTOR_DEL_PARTO'][j]
-                    df['INHIBIDOR_DEL_PARTO'][j] = df_m['INHIBIDOR_DEL_PARTO'][i] + df['INHIBIDOR_DEL_PARTO'][j]
-                    df['INMUNOSUPRESORES'][j] = df_m['INMUNOSUPRESORES'][i] + df['INMUNOSUPRESORES'][j]
-                    df['LAXANTES'][j] = df_m['LAXANTES'][i] + df['LAXANTES'][j]
-                    df['MUCOLITICOS'][j] = df_m['MUCOLITICOS'][i] + df['MUCOLITICOS'][j]
-                    df['OTROS_ANTIHIPERTENSIVOS'][j] = df_m['OTROS_ANTIHIPERTENSIVOS'][i] + df['OTROS_ANTIHIPERTENSIVOS'][j]
-                    df['RELAJANTE_MUSCULAR'][j] = df_m['RELAJANTE_MUSCULAR'][i] + df['RELAJANTE_MUSCULAR'][j]
-                    df['TERAPIA_TIROIDEA'][j] = df_m['TERAPIA_TIROIDEA'][i] + df['TERAPIA_TIROIDEA'][j]
-                    df['TRATAMIENTO_TUBERCULOSIS'][j] = df_m['TRATAMIENTO_TUBERCULOSIS'][i] + df['TRATAMIENTO_TUBERCULOSIS'][j]
-                    df['g1_ANALGESICOS'][j] = df_m['g1_ANALGESICOS'][i] + df['g1_ANALGESICOS'][j]
-                    df['g2_ANESTESIA'][j] = df_m['g2_ANESTESIA'][i] + df['g2_ANESTESIA'][j]
+                    
+                    df['g1'][j] = df_m['g1'][i] + df['g1'][j]
+                    df['g2'][j] = df_m['g2'][i] + df['g2'][j]
                     df['g3'][j] = df_m['g3'][i] + df['g3'][j]
                     df['g4'][j] = df_m['g4'][i] + df['g4'][j]
                     df['g5'][j] = df_m['g5'][i] + df['g5'][j]
@@ -1672,46 +1533,373 @@ def medicine_cat(df,df_m):
                     df['g21'][j] = df_m['g21'][i] + df['g21'][j]
                     df['g22'][j] = df_m['g22'][i] + df['g22'][j]
                     df['g23'][j] = df_m['g23'][i] + df['g23'][j]
-                    df['ANALGESICOS_URINARIOS'][j] = df_m['ANALGESICOS_URINARIOS'][i] + df['ANALGESICOS_URINARIOS'][j]
-                    df['ANTIAGREGANTES_PLAQUETARIOS'][j] = df_m['ANTIAGREGANTES_PLAQUETARIOS'][i] + df['ANTIAGREGANTES_PLAQUETARIOS'][j]
-                    df['ANTIALERGICOS'][j] = df_m['ANTIALERGICOS'][i] + df['ANTIALERGICOS'][j]
-                    df['ANTIANDROGENICOS'][j] = df_m['ANTIANDROGENICOS'][i] + df['ANTIANDROGENICOS'][j]
-                    df['ANTIARRITMICOS.1'][j] = df_m['ANTIARRITMICOS.1'][i] + df['ANTIARRITMICOS.1'][j]
-                    df['ANTICOAGULANTES_ORALES'][j] = df_m['ANTICOAGULANTES_ORALES'][i] + df['ANTICOAGULANTES_ORALES'][j]
-                    df['ANTIDEPRESIVOS.1'][j] = df_m['ANTIDEPRESIVOS.1'][i] + df['ANTIDEPRESIVOS.1'][j]
-                    df['ANTIFLAMATORIOS_ESTEROIDEOS'][j] = df_m['ANTIFLAMATORIOS_ESTEROIDEOS'][i] + df['ANTIFLAMATORIOS_ESTEROIDEOS'][j]
-                    df['ANTIHIPERTENSIVOS'][j] = df_m['ANTIHIPERTENSIVOS'][i] + df['ANTIHIPERTENSIVOS'][j]
-                    df['ANTIINFLAMATORIOS_NO_ESTEROIDEOS'][j] = df_m['ANTIINFLAMATORIOS_NO_ESTEROIDEOS'][i] + df['ANTIINFLAMATORIOS_NO_ESTEROIDEOS'][j]
-                    df['ANTIMICOTICOS_SISTEMICOS_Y_TOPICOS'][j] = df_m['ANTIMICOTICOS_SISTEMICOS_Y_TOPICOS'][i] + df['ANTIMICOTICOS_SISTEMICOS_Y_TOPICOS'][j]
-                    df['ANTIMUSCARINICOS'][j] = df_m['ANTIMUSCARINICOS'][i] + df['ANTIMUSCARINICOS'][j]
-                    df['ANTINEURITICOS'][j] = df_m['ANTINEURITICOS'][i] + df['ANTINEURITICOS'][j]
-                    df['ANTITUSIVOS.1'][j] = df_m['ANTITUSIVOS.1'][i] + df['ANTITUSIVOS.1'][j]
-                    df['ANTIULCEROSOS_Y_PROTECTORES_DE_LA_MUCOSA_GASTRICA'][j] = df_m['ANTIULCEROSOS_Y_PROTECTORES_DE_LA_MUCOSA_GASTRICA'][i] + df['ANTIULCEROSOS_Y_PROTECTORES_DE_LA_MUCOSA_GASTRICA'][j]
-                    df['ANTIURICOSURICOS'][j] = df_m['ANTIURICOSURICOS'][i] + df['ANTIURICOSURICOS'][j]
-                    df['ANTIVERTIGINOSOS'][j] = df_m['ANTIVERTIGINOSOS'][i] + df['ANTIVERTIGINOSOS'][j]
-                    df['BENZODIAZEPINAS'][j] = df_m['BENZODIAZEPINAS'][i] + df['BENZODIAZEPINAS'][j]
-                    df['BLOQUEADORES_ALFA'][j] = df_m['BLOQUEADORES_ALFA'][i] + df['BLOQUEADORES_ALFA'][j]
-                    df['BRONCODILATADORES_Y_EXPECTORANTES'][j] = df_m['BRONCODILATADORES_Y_EXPECTORANTES'][i] + df['BRONCODILATADORES_Y_EXPECTORANTES'][j]
-                    df['DISFUNCION_ERECTIL'][j] = df_m['DISFUNCION_ERECTIL'][i] + df['DISFUNCION_ERECTIL'][j]
-                    df['ELECTROLITOS_ORALES'][j] = df_m['ELECTROLITOS_ORALES'][i] + df['ELECTROLITOS_ORALES'][j]
-                    df['FARMACOS_INSUFICIENCIA_CARDIACA_Y_ANTIANGINOSOS'][j] = df_m['FARMACOS_INSUFICIENCIA_CARDIACA_Y_ANTIANGINOSOS'][i] + df['FARMACOS_INSUFICIENCIA_CARDIACA_Y_ANTIANGINOSOS'][j]
-                    df['FARMACOS_MODIFICADORES_DE_LA_ENFERMEDAD'][j] = df_m['FARMACOS_MODIFICADORES_DE_LA_ENFERMEDAD'][i] + df['FARMACOS_MODIFICADORES_DE_LA_ENFERMEDAD'][j]
-                    df['FARMACOS_OCULARES'][j] = df_m['FARMACOS_OCULARES'][i] + df['FARMACOS_OCULARES'][j]
-                    df['FARMACOS_UTILIZADOS_EN_CANCER_DE_MAMA'][j] = df_m['FARMACOS_UTILIZADOS_EN_CANCER_DE_MAMA'][i] + df['FARMACOS_UTILIZADOS_EN_CANCER_DE_MAMA'][j]
-                    df['FARMACOS_UTILIZADOS_EN_HIPERTIROIDISMO'][j] = df_m['FARMACOS_UTILIZADOS_EN_HIPERTIROIDISMO'][i] + df['FARMACOS_UTILIZADOS_EN_HIPERTIROIDISMO'][j]
-                    df['FARMACOS_UTILIZADOS_EN_HIPOTIROIDISMO'][j] = df_m['FARMACOS_UTILIZADOS_EN_HIPOTIROIDISMO'][i] + df['FARMACOS_UTILIZADOS_EN_HIPOTIROIDISMO'][j]
-                    df['FARMACOS_UTILIZADOS_EN_NEFROLOGIA'][j] = df_m['FARMACOS_UTILIZADOS_EN_NEFROLOGIA'][i] + df['FARMACOS_UTILIZADOS_EN_NEFROLOGIA'][j]
-                    df['FARMACOS_UTILIZADOS_EN_NEUROLOGIA'][j] = df_m['FARMACOS_UTILIZADOS_EN_NEUROLOGIA'][i] + df['FARMACOS_UTILIZADOS_EN_NEUROLOGIA'][j]
-                    df['FARMACOS_UTILIZADOS_EN_OSTEOPOROSIS'][j] = df_m['FARMACOS_UTILIZADOS_EN_OSTEOPOROSIS'][i] + df['FARMACOS_UTILIZADOS_EN_OSTEOPOROSIS'][j]
-                    df['FARMACOS_UTILIZADOS_EN_PSIQUIATRIA'][j] = df_m['FARMACOS_UTILIZADOS_EN_PSIQUIATRIA'][i] + df['FARMACOS_UTILIZADOS_EN_PSIQUIATRIA'][j]
-                    df['FORMULAS_NUTRICIONALES_COMPLETAS'][j] = df_m['FORMULAS_NUTRICIONALES_COMPLETAS'][i] + df['FORMULAS_NUTRICIONALES_COMPLETAS'][j]
-                    df['HIPOLIPEMIANTES'][j] = df_m['HIPOLIPEMIANTES'][i] + df['HIPOLIPEMIANTES'][j]
-                    df['HORMONALES'][j] = df_m['HORMONALES'][i] + df['HORMONALES'][j]
-                    df['METILXANTINAS'][j] = df_m['METILXANTINAS'][i] + df['METILXANTINAS'][j]
-                    df['VARIOS'][j] = df_m['VARIOS'][i] + df['VARIOS'][j]
-                    df['VITAMINICOS'][j] = df_m['VITAMINICOS'][i] + df['VITAMINICOS'][j]
-
-
-            
-    
     return df
+
+
+def clas_med(df,df_vac):
+    
+    df['ACIDIFICANTES DE LAS VIAS URINARIAS'] = 0
+    df['ACTIVADORES DEL METABOLISMO NEURONAL'] = 0
+    df['ADRENERGICOS'] = 0
+    df['ADYUVANTES DE LA ANALGESIA'] = 0
+    df['ANALGESICOS'] = 0
+    df['ANALGESICOS ANTIINFLAMATORIOS TOPICOS'] = 0
+    df['ANESTESICOS GENERALES'] = 0
+    df['ANESTESICOS LOCALES'] = 0
+    df['ANSIOLITICOS'] = 0
+    df['ANTAGONISTAS'] = 0
+    df['ANTIACIDOS'] = 0
+    df['ANTIADRENERGICOS'] = 0
+    df['ANTIALCOHOL'] = 0
+    df['ANTIALERGICOS'] = 0
+    df['ANTIAMEBIANOS'] = 0
+    df['ANTIANEMICOS'] = 0
+    df['ANTIANGINOSOS'] = 0
+    df['ANTIARRITMICOS'] = 0
+    df['ANTIARTRITICOS'] = 0
+    df['ANTIASMATICOS'] = 0
+    df['ANTICOAGULANTES'] = 0
+    df['ANTICOLINERGICOS'] = 0
+    df['ANTICONCEPTIVOS'] = 0
+    df['ANTIDEPRESIVOS'] = 0
+    df['ANTIDIABETICOS'] = 0
+    df['ANTIDIARREICOS'] = 0
+    df['ANTIDISFUNCION ERECTIL'] = 0
+    df['ANTIDOTOS'] = 0
+    df['ANTIEMETICOS'] = 0
+    df['ANTIEMETICOS Y ANTIVERTIGINOSOS'] = 0
+    df['ANTIENURESIS'] = 0
+    df['ANTIEPILEPTICOS'] = 0
+    df['ANTIESPASMODICOS'] = 0
+    df['ANTIESPASMODICOS DE VIAS URINARIAS'] = 0
+    df['ANTIESTROGENOS'] = 0
+    df['ANTIFLATULENTOS'] = 0
+    df['ANTIGOTOSOS'] = 0
+    df['ANTIGRIPALES'] = 0
+    df['ANTIHELMINTICOS'] = 0
+    df['ANTIHIPERPROLACTINEMICOS'] = 0
+    df['ANTIHIPERTENSIVOS'] = 0
+    df['ANTIHISTAMINICOS'] = 0
+    df['ANTIINFLAMATORIOS'] = 0
+    df['ANTILEPROSOS'] = 0
+    df['ANTIMICOTICOS'] = 0
+    df['ANTIMICROBIANOS'] = 0
+    df['ANTIMICROBIANOS OTICOS'] = 0
+    df['ANTIMIGRANOSOS'] = 0
+    df['ANTINEOPLASICOS'] = 0
+    df['ANTINICOTINICOS'] = 0
+    df['ANTIOBESIDAD'] = 0
+    df['ANTIOSTEOPOROSICOS'] = 0
+    df['ANTIPALUDICOS'] = 0
+    df['ANTIPARASITARIOS VAGINALES'] = 0
+    df['ANTIPARKINSONIANOS'] = 0
+    df['ANTIPROSTATICOS'] = 0
+    df['ANTIPROTOZOARIOS'] = 0
+    df['ANTIPSICOTICOS'] = 0
+    df['ANTIRREUMATICOS'] = 0
+    df['ANTISEPTICOS'] = 0
+    df['ANTISEPTICOS URINARIOS'] = 0
+    df['ANTITABAQUISMO'] = 0
+    df['ANTITIROIDEOS'] = 0
+    df['ANTITUBERCULOSOS'] = 0
+    df['ANTITUSIGENOS'] = 0
+    df['ANTIULCEROSOS'] = 0
+    df['ANTIVERTIGINOSOS'] = 0
+    df['ANTIVIRALES'] = 0
+    df['BRONCODILATADORES'] = 0
+    df['COAGULANTES'] = 0
+    df['COLINERGICOS'] = 0
+    df['CORTICOSTEROIDES'] = 0
+    df['DERMATOLOGICOS'] = 0
+    df['DESINFECTANTES'] = 0
+    df['DIURETICOS'] = 0
+    df['DOPAMINERGICOS'] = 0
+    df['ELECTROLITOS ORALES'] = 0
+    df['ESTIMULANTES DE GRANULOCITOS'] = 0
+    df['ESTIMULANTES DE LA CONTRACTILIDAD UTERINA'] = 0
+    df['ESTIMULANTES DE LA MOTILIDAD UTERINA'] = 0
+    df['EXPECTORANTES'] = 0
+    df['GLUCOSIDOS CARDIACOS'] = 0
+    df['HEMATOPOYETICOS'] = 0
+    df['HIPOCALCEMICOS'] = 0
+    df['HIPOLIPEMIANTES'] = 0
+    df['HORMONAS'] = 0
+    df['INDUCTORES DE LA OVULACION'] = 0
+    df['INMUNODEPRESORES'] = 0
+    df['INMUNOGLOBULINAS'] = 0
+    df['LAXANTES'] = 0
+    df['LITOLITICOS'] = 0
+    df['MINERALES'] = 0
+    df['NEUROPROTECTORES'] = 0
+    df['OFTALMICOS'] = 0
+    df['OTROS INOTROPICOS POSITIVOS'] = 0
+    df['OXITOCICOS'] = 0
+    df['PROCINETICOS GASTROINTESTINALES'] = 0
+    df['RELAJANTES MUSCULARES'] = 0
+    df['RELAJANTES VASCULARES'] = 0
+    df['SEDANTES HIPNOTICOS'] = 0
+    df['SOLUCIONES ELECTROLITICAS'] = 0
+    df['SUEROS INMUNITARIOS'] = 0
+    df['TOXOIDES'] = 0
+    df['TROMBOLITICOS'] = 0
+    df['VACUNAS'] = 0
+    df['VASOPRESORES'] = 0
+    df['VITAMINAS'] = 0
+
+    for i in range(len(df['medicamentos'])):
+        x = str(df['medicamentos'][i])
+        
+        for j in range(len(df_vac['med1'])):            
+            num_m = df_vac['num_med'][j]
+            m1 = str(df_vac['med1'][j])
+            m2 = str(df_vac['med2'][j])
+            m3 = str(df_vac['med3'][j])
+            #m4 = str(df_vac['med4'][j])          
+            """
+            print('m1: ',m1)
+            print('m2: ',m2)
+            print('m3: ',m3)
+            print('x1: ', x.find(m1))
+            print('x2: ', x.find(m2))
+            print('x3: ', x.find(m3))
+            """
+            flag = 0
+            
+            if(num_m == 1 and (x.find(m1) != -1) and (~pd.isna(m1))):
+                #df[str(df_vac['med1'])] = 1
+                flag = 1
+                
+            if(num_m == 2 and (x.find(m1) != -1) and (~pd.isna(m1)) and \
+               (x.find(m2) != -1) and (~pd.isna(m2))):                
+                #df[str(df_vac['med1'])] = 1
+                #df[str(df_vac['med2'])] = 1
+                flag = 1
+                
+            if(num_m == 3 and (x.find(m1) != -1) and (~pd.isna(m1)) and \
+               (x.find(m2) != -1) and (~pd.isna(m2)) and \
+               (x.find(m3) != -1) and (~pd.isna(m3))):                   
+                #df[str(df_vac['med1'])] = 1
+                #df[str(df_vac['med2'])] = 1
+                #df[str(df_vac['med3'])] = 1
+                flag = 1
+            
+            if (flag == 1):
+                if(df['ACIDIFICANTES DE LAS VIAS URINARIAS'][i] ==0): 
+                    df['ACIDIFICANTES DE LAS VIAS URINARIAS'][i] = df_vac['ACIDIFICANTES DE LAS VIAS URINARIAS'][j]
+                if(df['ACTIVADORES DEL METABOLISMO NEURONAL'][i] ==0): 
+                    df['ACTIVADORES DEL METABOLISMO NEURONAL'][i] = df_vac['ACTIVADORES DEL METABOLISMO NEURONAL'][j]
+                if(df['ADRENERGICOS'][i] ==0): 
+                    df['ADRENERGICOS'][i] = df_vac['ADRENERGICOS'][j]
+                if(df['ADYUVANTES DE LA ANALGESIA'][i] ==0): 
+                    df['ADYUVANTES DE LA ANALGESIA'][i] = df_vac['ADYUVANTES DE LA ANALGESIA'][j]
+                if(df['ANALGESICOS'][i] ==0): 
+                    df['ANALGESICOS'][i] = df_vac['ANALGESICOS'][j]
+                if(df['ANALGESICOS ANTIINFLAMATORIOS TOPICOS'][i] ==0): 
+                    df['ANALGESICOS ANTIINFLAMATORIOS TOPICOS'][i] = df_vac['ANALGESICOS ANTIINFLAMATORIOS TOPICOS'][j]
+                if(df['ANESTESICOS GENERALES'][i] ==0): 
+                    df['ANESTESICOS GENERALES'][i] = df_vac['ANESTESICOS GENERALES'][j]
+                if(df['ANESTESICOS LOCALES'][i] ==0): 
+                    df['ANESTESICOS LOCALES'][i] = df_vac['ANESTESICOS LOCALES'][j]
+                if(df['ANSIOLITICOS'][i] ==0): 
+                    df['ANSIOLITICOS'][i] = df_vac['ANSIOLITICOS'][j]
+                if(df['ANTAGONISTAS'][i] ==0): 
+                    df['ANTAGONISTAS'][i] = df_vac['ANTAGONISTAS'][j]
+                if(df['ANTIACIDOS'][i] ==0): 
+                    df['ANTIACIDOS'][i] = df_vac['ANTIACIDOS'][j]
+                if(df['ANTIADRENERGICOS'][i] ==0): 
+                    df['ANTIADRENERGICOS'][i] = df_vac['ANTIADRENERGICOS'][j]
+                if(df['ANTIALCOHOL'][i] ==0): 
+                    df['ANTIALCOHOL'][i] = df_vac['ANTIALCOHOL'][j]
+                if(df['ANTIALERGICOS'][i] ==0): 
+                    df['ANTIALERGICOS'][i] = df_vac['ANTIALERGICOS'][j]
+                if(df['ANTIAMEBIANOS'][i] ==0): 
+                    df['ANTIAMEBIANOS'][i] = df_vac['ANTIAMEBIANOS'][j]
+                if(df['ANTIANEMICOS'][i] ==0): 
+                    df['ANTIANEMICOS'][i] = df_vac['ANTIANEMICOS'][j]
+                if(df['ANTIANGINOSOS'][i] ==0): 
+                    df['ANTIANGINOSOS'][i] = df_vac['ANTIANGINOSOS'][j]
+                if(df['ANTIARRITMICOS'][i] ==0): 
+                    df['ANTIARRITMICOS'][i] = df_vac['ANTIARRITMICOS'][j]
+                if(df['ANTIARTRITICOS'][i] ==0): 
+                    df['ANTIARTRITICOS'][i] = df_vac['ANTIARTRITICOS'][j]
+                if(df['ANTIASMATICOS'][i] ==0): 
+                    df['ANTIASMATICOS'][i] = df_vac['ANTIASMATICOS'][j]
+                if(df['ANTICOAGULANTES'][i] ==0): 
+                    df['ANTICOAGULANTES'][i] = df_vac['ANTICOAGULANTES'][j]
+                if(df['ANTICOLINERGICOS'][i] ==0): 
+                    df['ANTICOLINERGICOS'][i] = df_vac['ANTICOLINERGICOS'][j]
+                if(df['ANTICONCEPTIVOS'][i] ==0): 
+                    df['ANTICONCEPTIVOS'][i] = df_vac['ANTICONCEPTIVOS'][j]
+                if(df['ANTIDEPRESIVOS'][i] ==0): 
+                    df['ANTIDEPRESIVOS'][i] = df_vac['ANTIDEPRESIVOS'][j]
+                if(df['ANTIDIABETICOS'][i] ==0): 
+                    df['ANTIDIABETICOS'][i] = df_vac['ANTIDIABETICOS'][j]
+                if(df['ANTIDIARREICOS'][i] ==0): 
+                    df['ANTIDIARREICOS'][i] = df_vac['ANTIDIARREICOS'][j]
+                if(df['ANTIDISFUNCION ERECTIL'][i] ==0): 
+                    df['ANTIDISFUNCION ERECTIL'][i] = df_vac['ANTIDISFUNCION ERECTIL'][j]
+                if(df['ANTIDOTOS'][i] ==0): 
+                    df['ANTIDOTOS'][i] = df_vac['ANTIDOTOS'][j]
+                if(df['ANTIEMETICOS'][i] ==0): 
+                    df['ANTIEMETICOS'][i] = df_vac['ANTIEMETICOS'][j]
+                if(df['ANTIEMETICOS Y ANTIVERTIGINOSOS'][i] ==0): 
+                    df['ANTIEMETICOS Y ANTIVERTIGINOSOS'][i] = df_vac['ANTIEMETICOS Y ANTIVERTIGINOSOS'][j]
+                if(df['ANTIENURESIS'][i] ==0): 
+                    df['ANTIENURESIS'][i] = df_vac['ANTIENURESIS'][j]
+                if(df['ANTIEPILEPTICOS'][i] ==0): 
+                    df['ANTIEPILEPTICOS'][i] = df_vac['ANTIEPILEPTICOS'][j]
+                if(df['ANTIESPASMODICOS'][i] ==0): 
+                    df['ANTIESPASMODICOS'][i] = df_vac['ANTIESPASMODICOS'][j]
+                if(df['ANTIESPASMODICOS DE VIAS URINARIAS'][i] ==0): 
+                    df['ANTIESPASMODICOS DE VIAS URINARIAS'][i] = df_vac['ANTIESPASMODICOS DE VIAS URINARIAS'][j]
+                if(df['ANTIESTROGENOS'][i] ==0): 
+                    df['ANTIESTROGENOS'][i] = df_vac['ANTIESTROGENOS'][j]
+                if(df['ANTIFLATULENTOS'][i] ==0): 
+                    df['ANTIFLATULENTOS'][i] = df_vac['ANTIFLATULENTOS'][j]
+                if(df['ANTIGOTOSOS'][i] ==0): 
+                    df['ANTIGOTOSOS'][i] = df_vac['ANTIGOTOSOS'][j]
+                if(df['ANTIGRIPALES'][i] ==0): 
+                    df['ANTIGRIPALES'][i] = df_vac['ANTIGRIPALES'][j]
+                if(df['ANTIHELMINTICOS'][i] ==0): 
+                    df['ANTIHELMINTICOS'][i] = df_vac['ANTIHELMINTICOS'][j]
+                if(df['ANTIHIPERPROLACTINEMICOS'][i] ==0): 
+                    df['ANTIHIPERPROLACTINEMICOS'][i] = df_vac['ANTIHIPERPROLACTINEMICOS'][j]
+                if(df['ANTIHIPERTENSIVOS'][i] ==0): 
+                    df['ANTIHIPERTENSIVOS'][i] = df_vac['ANTIHIPERTENSIVOS'][j]
+                if(df['ANTIHISTAMINICOS'][i] ==0): 
+                    df['ANTIHISTAMINICOS'][i] = df_vac['ANTIHISTAMINICOS'][j]
+                if(df['ANTIINFLAMATORIOS'][i] ==0): 
+                    df['ANTIINFLAMATORIOS'][i] = df_vac['ANTIINFLAMATORIOS'][j]
+                if(df['ANTILEPROSOS'][i] ==0): 
+                    df['ANTILEPROSOS'][i] = df_vac['ANTILEPROSOS'][j]
+                if(df['ANTIMICOTICOS'][i] ==0): 
+                    df['ANTIMICOTICOS'][i] = df_vac['ANTIMICOTICOS'][j]
+                if(df['ANTIMICROBIANOS'][i] ==0): 
+                    df['ANTIMICROBIANOS'][i] = df_vac['ANTIMICROBIANOS'][j]
+                if(df['ANTIMICROBIANOS OTICOS'][i] ==0): 
+                    df['ANTIMICROBIANOS OTICOS'][i] = df_vac['ANTIMICROBIANOS OTICOS'][j]
+                if(df['ANTIMIGRANOSOS'][i] ==0): 
+                    df['ANTIMIGRANOSOS'][i] = df_vac['ANTIMIGRANOSOS'][j]
+                if(df['ANTINEOPLASICOS'][i] ==0): 
+                    df['ANTINEOPLASICOS'][i] = df_vac['ANTINEOPLASICOS'][j]
+                if(df['ANTINICOTINICOS'][i] ==0): 
+                    df['ANTINICOTINICOS'][i] = df_vac['ANTINICOTINICOS'][j]
+                if(df['ANTIOBESIDAD'][i] ==0): 
+                    df['ANTIOBESIDAD'][i] = df_vac['ANTIOBESIDAD'][j]
+                if(df['ANTIOSTEOPOROSICOS'][i] ==0): 
+                    df['ANTIOSTEOPOROSICOS'][i] = df_vac['ANTIOSTEOPOROSICOS'][j]
+                if(df['ANTIPALUDICOS'][i] ==0): 
+                    df['ANTIPALUDICOS'][i] = df_vac['ANTIPALUDICOS'][j]
+                if(df['ANTIPARASITARIOS VAGINALES'][i] ==0): 
+                    df['ANTIPARASITARIOS VAGINALES'][i] = df_vac['ANTIPARASITARIOS VAGINALES'][j]
+                if(df['ANTIPARKINSONIANOS'][i] ==0): 
+                    df['ANTIPARKINSONIANOS'][i] = df_vac['ANTIPARKINSONIANOS'][j]
+                if(df['ANTIPROSTATICOS'][i] ==0): 
+                    df['ANTIPROSTATICOS'][i] = df_vac['ANTIPROSTATICOS'][j]
+                if(df['ANTIPROTOZOARIOS'][i] ==0): 
+                    df['ANTIPROTOZOARIOS'][i] = df_vac['ANTIPROTOZOARIOS'][j]
+                if(df['ANTIPSICOTICOS'][i] ==0): 
+                    df['ANTIPSICOTICOS'][i] = df_vac['ANTIPSICOTICOS'][j]
+                if(df['ANTIRREUMATICOS'][i] ==0): 
+                    df['ANTIRREUMATICOS'][i] = df_vac['ANTIRREUMATICOS'][j]
+                if(df['ANTISEPTICOS'][i] ==0): 
+                    df['ANTISEPTICOS'][i] = df_vac['ANTISEPTICOS'][j]
+                if(df['ANTISEPTICOS URINARIOS'][i] ==0): 
+                    df['ANTISEPTICOS URINARIOS'][i] = df_vac['ANTISEPTICOS URINARIOS'][j]
+                if(df['ANTITABAQUISMO'][i] ==0): 
+                    df['ANTITABAQUISMO'][i] = df_vac['ANTITABAQUISMO'][j]
+                if(df['ANTITIROIDEOS'][i] ==0): 
+                    df['ANTITIROIDEOS'][i] = df_vac['ANTITIROIDEOS'][j]
+                if(df['ANTITUBERCULOSOS'][i] ==0): 
+                    df['ANTITUBERCULOSOS'][i] = df_vac['ANTITUBERCULOSOS'][j]
+                if(df['ANTITUSIGENOS'][i] ==0): 
+                    df['ANTITUSIGENOS'][i] = df_vac['ANTITUSIGENOS'][j]
+                if(df['ANTIULCEROSOS'][i] ==0): 
+                    df['ANTIULCEROSOS'][i] = df_vac['ANTIULCEROSOS'][j]
+                if(df['ANTIVERTIGINOSOS'][i] ==0): 
+                    df['ANTIVERTIGINOSOS'][i] = df_vac['ANTIVERTIGINOSOS'][j]
+                if(df['ANTIVIRALES'][i] ==0): 
+                    df['ANTIVIRALES'][i] = df_vac['ANTIVIRALES'][j]
+                if(df['BRONCODILATADORES'][i] ==0): 
+                    df['BRONCODILATADORES'][i] = df_vac['BRONCODILATADORES'][j]
+                if(df['COAGULANTES'][i] ==0): 
+                    df['COAGULANTES'][i] = df_vac['COAGULANTES'][j]
+                if(df['COLINERGICOS'][i] ==0): 
+                    df['COLINERGICOS'][i] = df_vac['COLINERGICOS'][j]
+                if(df['CORTICOSTEROIDES'][i] ==0): 
+                    df['CORTICOSTEROIDES'][i] = df_vac['CORTICOSTEROIDES'][j]
+                if(df['DERMATOLOGICOS'][i] ==0): 
+                    df['DERMATOLOGICOS'][i] = df_vac['DERMATOLOGICOS'][j]
+                if(df['DESINFECTANTES'][i] ==0): 
+                    df['DESINFECTANTES'][i] = df_vac['DESINFECTANTES'][j]
+                if(df['DIURETICOS'][i] ==0): 
+                    df['DIURETICOS'][i] = df_vac['DIURETICOS'][j]
+                if(df['DOPAMINERGICOS'][i] ==0): 
+                    df['DOPAMINERGICOS'][i] = df_vac['DOPAMINERGICOS'][j]
+                if(df['ELECTROLITOS ORALES'][i] ==0): 
+                    df['ELECTROLITOS ORALES'][i] = df_vac['ELECTROLITOS ORALES'][j]
+                if(df['ESTIMULANTES DE GRANULOCITOS'][i] ==0): 
+                    df['ESTIMULANTES DE GRANULOCITOS'][i] = df_vac['ESTIMULANTES DE GRANULOCITOS'][j]
+                if(df['ESTIMULANTES DE LA CONTRACTILIDAD UTERINA'][i] ==0): 
+                    df['ESTIMULANTES DE LA CONTRACTILIDAD UTERINA'][i] = df_vac['ESTIMULANTES DE LA CONTRACTILIDAD UTERINA'][j]
+                if(df['ESTIMULANTES DE LA MOTILIDAD UTERINA'][i] ==0): 
+                    df['ESTIMULANTES DE LA MOTILIDAD UTERINA'][i] = df_vac['ESTIMULANTES DE LA MOTILIDAD UTERINA'][j]
+                if(df['EXPECTORANTES'][i] ==0): 
+                    df['EXPECTORANTES'][i] = df_vac['EXPECTORANTES'][j]
+                if(df['GLUCOSIDOS CARDIACOS'][i] ==0): 
+                    df['GLUCOSIDOS CARDIACOS'][i] = df_vac['GLUCOSIDOS CARDIACOS'][j]
+                if(df['HEMATOPOYETICOS'][i] ==0): 
+                    df['HEMATOPOYETICOS'][i] = df_vac['HEMATOPOYETICOS'][j]
+                if(df['HIPOCALCEMICOS'][i] ==0): 
+                    df['HIPOCALCEMICOS'][i] = df_vac['HIPOCALCEMICOS'][j]
+                if(df['HIPOLIPEMIANTES'][i] ==0): 
+                    df['HIPOLIPEMIANTES'][i] = df_vac['HIPOLIPEMIANTES'][j]
+                if(df['HORMONAS'][i] ==0): 
+                    df['HORMONAS'][i] = df_vac['HORMONAS'][j]
+                if(df['INDUCTORES DE LA OVULACION'][i] ==0): 
+                    df['INDUCTORES DE LA OVULACION'][i] = df_vac['INDUCTORES DE LA OVULACION'][j]
+                if(df['INMUNODEPRESORES'][i] ==0): 
+                    df['INMUNODEPRESORES'][i] = df_vac['INMUNODEPRESORES'][j]
+                if(df['INMUNOGLOBULINAS'][i] ==0): 
+                    df['INMUNOGLOBULINAS'][i] = df_vac['INMUNOGLOBULINAS'][j]
+                if(df['LAXANTES'][i] ==0): 
+                    df['LAXANTES'][i] = df_vac['LAXANTES'][j]
+                if(df['LITOLITICOS'][i] ==0): 
+                    df['LITOLITICOS'][i] = df_vac['LITOLITICOS'][j]
+                if(df['MINERALES'][i] ==0): 
+                    df['MINERALES'][i] = df_vac['MINERALES'][j]
+                if(df['NEUROPROTECTORES'][i] ==0): 
+                    df['NEUROPROTECTORES'][i] = df_vac['NEUROPROTECTORES'][j]
+                if(df['OFTALMICOS'][i] ==0): 
+                    df['OFTALMICOS'][i] = df_vac['OFTALMICOS'][j]
+                if(df['OTROS INOTROPICOS POSITIVOS'][i] ==0): 
+                    df['OTROS INOTROPICOS POSITIVOS'][i] = df_vac['OTROS INOTROPICOS POSITIVOS'][j]
+                if(df['OXITOCICOS'][i] ==0): 
+                    df['OXITOCICOS'][i] = df_vac['OXITOCICOS'][j]
+                if(df['PROCINETICOS GASTROINTESTINALES'][i] ==0): 
+                    df['PROCINETICOS GASTROINTESTINALES'][i] = df_vac['PROCINETICOS GASTROINTESTINALES'][j]
+                if(df['RELAJANTES MUSCULARES'][i] ==0): 
+                    df['RELAJANTES MUSCULARES'][i] = df_vac['RELAJANTES MUSCULARES'][j]
+                if(df['RELAJANTES VASCULARES'][i] ==0): 
+                    df['RELAJANTES VASCULARES'][i] = df_vac['RELAJANTES VASCULARES'][j]
+                if(df['SEDANTES HIPNOTICOS'][i] ==0): 
+                    df['SEDANTES HIPNOTICOS'][i] = df_vac['SEDANTES HIPNOTICOS'][j]
+                if(df['SOLUCIONES ELECTROLITICAS'][i] ==0): 
+                    df['SOLUCIONES ELECTROLITICAS'][i] = df_vac['SOLUCIONES ELECTROLITICAS'][j]
+                if(df['SUEROS INMUNITARIOS'][i] ==0): 
+                    df['SUEROS INMUNITARIOS'][i] = df_vac['SUEROS INMUNITARIOS'][j]
+                if(df['TOXOIDES'][i] ==0): 
+                    df['TOXOIDES'][i] = df_vac['TOXOIDES'][j]
+                if(df['TROMBOLITICOS'][i] ==0): 
+                    df['TROMBOLITICOS'][i] = df_vac['TROMBOLITICOS'][j]
+                if(df['VACUNAS'][i] ==0): 
+                    df['VACUNAS'][i] = df_vac['VACUNAS'][j]
+                if(df['VASOPRESORES'][i] ==0): 
+                    df['VASOPRESORES'][i] = df_vac['VASOPRESORES'][j]
+                if(df['VITAMINAS'][i] ==0): 
+                    df['VITAMINAS'][i] = df_vac['VITAMINAS'][j]
+
+                
+                
+    return df
+

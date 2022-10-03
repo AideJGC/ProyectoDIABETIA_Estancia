@@ -194,14 +194,14 @@ def fecha_ini_fin(fecha_ini):
     fecha_ini = pd.to_datetime(fecha_ini)
     fecha_ini = pd.Timestamp(fecha_ini)
     
-    #a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
-    #a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
-    #a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
+    a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
+    a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
+    a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
     
-    a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
-    a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
-    a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')
-    """
+    #a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
+    #a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
+    #a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')
+    
     i = a_ini.strftime('%Y-%m-%d')
     i_t = a_inter.strftime('%Y-%m-%d')
     f = a_fin.strftime('%Y-%m-%d')
@@ -209,11 +209,11 @@ def fecha_ini_fin(fecha_ini):
     i = dias_year(i)
     i_t = dias_year(i_t)
     f = dias_year(f)    
-    """
     
-    i = 45
-    i_t = 90
-    f = 30 
+    
+    #i = 45
+    #i_t = 90
+    #f = 30 
     
     
     a_ini = fecha_ini+pd.to_timedelta(i, unit = 'D')
@@ -1253,36 +1253,36 @@ def lista_mex_enf(df):
                              df['codigos_cie'].str.contains('K77'), 1, 0)
     
     # enfermedades endocrinas, nutricionales y metabolicas
-    df['E0'] = np.where(df['codigos_cie'].str.contains('E0'), 1, 0)
-    df['E15_E16'] = np.where(df["codigos_cie"].str.contains('E15')|
-                             df["codigos_cie"].str.contains('E16'), 1, 0)
-    df['E20_E35'] = np.where(df["codigos_cie"].str.contains('E2')|
-                             df["codigos_cie"].str.contains('E30')|
-                             df["codigos_cie"].str.contains('E31')|
-                             df["codigos_cie"].str.contains('E32')|
-                             df["codigos_cie"].str.contains('E33')|
-                             df["codigos_cie"].str.contains('E34')|
-                             df["codigos_cie"].str.contains('E35'), 1, 0)
-    df['E40_E46'] = np.where(df["codigos_cie"].str.contains('E40')|
-                             df["codigos_cie"].str.contains('E41')|
-                             df["codigos_cie"].str.contains('E42')|
-                             df["codigos_cie"].str.contains('E43')|
-                             df["codigos_cie"].str.contains('E44')|
-                             df["codigos_cie"].str.contains('E45')|
-                             df["codigos_cie"].str.contains('E46'), 1, 0)
-    df['E50_E64'] = np.where(df["codigos_cie"].str.contains('E5')|
-                             df["codigos_cie"].str.contains('E60')|
-                             df["codigos_cie"].str.contains('E61')|
-                             df["codigos_cie"].str.contains('E62')|
-                             df["codigos_cie"].str.contains('E63')|
-                             df["codigos_cie"].str.contains('E64'), 1, 0) 
+    df['E0_E64'] = np.where(df['codigos_cie'].str.contains('E0')|
+                            df["codigos_cie"].str.contains('E15')|
+                            df["codigos_cie"].str.contains('E16')|
+                            df["codigos_cie"].str.contains('E2')|
+                            df["codigos_cie"].str.contains('E30')|
+                            df["codigos_cie"].str.contains('E31')|
+                            df["codigos_cie"].str.contains('E32')|
+                            df["codigos_cie"].str.contains('E33')|
+                            df["codigos_cie"].str.contains('E34')|
+                            df["codigos_cie"].str.contains('E35')|
+                            df["codigos_cie"].str.contains('E40')|
+                            df["codigos_cie"].str.contains('E41')|
+                            df["codigos_cie"].str.contains('E42')|
+                            df["codigos_cie"].str.contains('E43')|
+                            df["codigos_cie"].str.contains('E44')|
+                            df["codigos_cie"].str.contains('E45')|
+                            df["codigos_cie"].str.contains('E46')|
+                            df["codigos_cie"].str.contains('E5')|
+                            df["codigos_cie"].str.contains('E60')|
+                            df["codigos_cie"].str.contains('E61')|
+                            df["codigos_cie"].str.contains('E62')|
+                            df["codigos_cie"].str.contains('E63')|
+                            df["codigos_cie"].str.contains('E64'), 1, 0) 
     
     # OBESIDAD
     df['E65_E68'] = np.where(df['codigos_cie'].str.contains('E65')|
                              df["codigos_cie"].str.contains('E66')|
                              df["codigos_cie"].str.contains('E67')|
                              df["codigos_cie"].str.contains('E68'), 1, 0)
-    df['R635'] = np.where(df['codigos_cie'].str.contains('R635'), 1, 0)
+    #df['R635'] = np.where(df['codigos_cie'].str.contains('R635'), 1, 0)
                                                             
     # TRASTORNOS METABOLICOS
     df['E70_E90'] = np.where(df['codigos_cie'].str.contains('E7')|
@@ -1299,51 +1299,29 @@ def lista_mex_enf(df):
                              df['codigos_cie'].str.contains('O16'), 1, 0)
     
     df['O22'] = np.where(df['codigos_cie'].str.contains('O22'), 1, 0)  
-    df['O244'] = np.where(df['codigos_cie'].str.contains('O244'), 1, 0)  
-    df['O260'] = np.where(df['codigos_cie'].str.contains('O260'), 1, 0)  
-    
+    df['O24'] = np.where(df['codigos_cie'].str.contains('O24'), 1, 0)  
     
     # ENFERMEDADES HIPERTENSIVAS
-    df['I10'] = np.where(df['codigos_cie'].str.contains('I10'), 1, 0)
-    df['I11'] = np.where(df['codigos_cie'].str.contains('I11'), 1, 0)
-    df['I12'] = np.where(df['codigos_cie'].str.contains('I12'), 1, 0)
-    df['I13'] = np.where(df['codigos_cie'].str.contains('I13'), 1, 0)
-    df['I15'] = np.where(df['codigos_cie'].str.contains('I15'), 1, 0)
+    df['I10_I15'] = np.where(df['codigos_cie'].str.contains('I10')|
+                             df['codigos_cie'].str.contains('I11')|
+                             df['codigos_cie'].str.contains('I12')|
+                             df['codigos_cie'].str.contains('I13')|
+                             df['codigos_cie'].str.contains('I15'), 1, 0)
                                                             
     # ARTERIOESCLEROSIS, ENVENENAMIENTO
-    df['Y52'] = np.where(df['codigos_cie'].str.contains('Y52'), 1, 0)
-    df['Y526'] = np.where(df['codigos_cie'].str.contains('Y526'), 1, 0)
-    df['T46'] = np.where(df['codigos_cie'].str.contains('T46'), 1, 0)
-    df['T466'] = np.where(df['codigos_cie'].str.contains('T466'), 1, 0)
-    
-    # TUMORES        
-    df['Tumor_maligo'] = np.where(df["codigos_cie"].str.contains('C'), 1, 0)   
-    df['Tumor_insitu'] = np.where(df["codigos_cie"].str.contains('D0'), 1, 0) 
-    df['Tumor_benigno'] = np.where(df["codigos_cie"].str.contains('D1')|
-                             df["codigos_cie"].str.contains('D2')|
-                             df["codigos_cie"].str.contains('D30')|
-                             df["codigos_cie"].str.contains('D31')|
-                             df["codigos_cie"].str.contains('D32')|
-                             df["codigos_cie"].str.contains('D33')|
-                             df["codigos_cie"].str.contains('D34')|
-                             df["codigos_cie"].str.contains('D35')|
-                             df["codigos_cie"].str.contains('D36'), 1, 0)   
-    df['Tumor_incierto'] = np.where(df["codigos_cie"].str.contains('D37')|
-                             df["codigos_cie"].str.contains('D38')|
-                             df["codigos_cie"].str.contains('D39')|
-                             df["codigos_cie"].str.contains('D4'), 1, 0)                                          
-    
+    df['Y52_T46'] = np.where(df['codigos_cie'].str.contains('Y52')|
+                             df['codigos_cie'].str.contains('T46'), 1, 0)
     # ENFERMEDADES DEL SISTEMA CIRCULATORIO     
-    df['I6'] = np.where(df["codigos_cie"].str.contains('I6'), 1, 0)     
-    df['I7'] = np.where(df["codigos_cie"].str.contains('I7'), 1, 0)     
-    df['I8'] = np.where(df["codigos_cie"].str.contains('I8'), 1, 0) 
+    df['I6_I8'] = np.where(df["codigos_cie"].str.contains('I6')|   
+                           df["codigos_cie"].str.contains('I7')|   
+                           df["codigos_cie"].str.contains('I8'), 1, 0) 
         
     # SIGNOS Y SÍNTOMAS
-    df['R0'] = np.where(df["codigos_cie"].str.contains('R0'), 1, 0)    
-    df['R1'] = np.where(df["codigos_cie"].str.contains('R1'), 1, 0)  
-    df['R2'] = np.where(df["codigos_cie"].str.contains('R2'), 1, 0)
-    df['R3'] = np.where(df["codigos_cie"].str.contains('R3'), 1, 0)  
-    df['R4'] = np.where(df["codigos_cie"].str.contains('R4'), 1, 0)
+    df['R0_R4'] = np.where(df["codigos_cie"].str.contains('R0')|   
+                           df["codigos_cie"].str.contains('R1')|
+                           df["codigos_cie"].str.contains('R2')|
+                           df["codigos_cie"].str.contains('R3')|  
+                           df["codigos_cie"].str.contains('R4'), 1, 0)
     
     # ----------------------------------------------------------------------------------------------------------
     df["enf_inf_intestinales"] = df['enf_inf_intestinales'].astype('category')
@@ -1422,15 +1400,11 @@ def lista_mex_enf(df):
     df['K70_K77'] = df['K70_K77'].astype('category')
                                                             
     # enfermedades endocrinas, nutricionales y metabolicas
-    df['E0'] = df['E0'].astype('category')
-    df['E15_E16'] = df['E15_E16'].astype('category')
-    df['E20_E35'] = df['E20_E35'].astype('category')
-    df['E40_E46'] = df['E40_E46'].astype('category')
-    df['E50_E64'] = df['E50_E64'].astype('category')
+    df['E0_E64'] = df['E0_E64'].astype('category')
     
     #obses
     df['E65_E68'] = df['E65_E68'].astype('category')
-    df['R635'] = df['R635'].astype('category')   
+    #df['R635'] = df['R635'].astype('category')   
                                                             
     # TRASTORNOS METABOLICOS
     df['E70_E90'] = df['E70_E90'].astype('category')
@@ -1438,38 +1412,18 @@ def lista_mex_enf(df):
     # EMBARAZO
     df['O10_O16'] = df['O10_O16'].astype('category')
     df['O22'] = df['O22'].astype('category')
-    df['O244'] = df['O244'].astype('category')
-    df['O260'] = df['O260'].astype('category')                                                            
+    df['O24'] = df['O24'].astype('category')                                                        
     
     # enf hipertensivas
-    df['I10'] = df['I10'].astype('category')
-    df['I11'] = df['I11'].astype('category')
-    df['I12'] = df['I12'].astype('category')
-    df['I13'] = df['I13'].astype('category')
-    df['I15'] = df['I15'].astype('category')
+    df['I10_I15'] = df['I10_I15'].astype('category')
                                                             
     # arteriosc ENVEN
-    df['Y52'] = df['Y52'].astype('category')
-    df['Y526'] = df['Y526'].astype('category')
-    df['T46'] = df['T46'].astype('category')
-    df['T466'] = df['T466'].astype('category')
-                                                            
-    # TUMORES
-    df['Tumor_maligo'] = df['Tumor_maligo'].astype('category')
-    df['Tumor_insitu'] = df['Tumor_insitu'].astype('category')
-    df['Tumor_benigno'] = df['Tumor_benigno'].astype('category')
-    df['Tumor_incierto'] = df['Tumor_incierto'].astype('category')
-    
+    df['Y52_T46'] = df['Y52_T46'].astype('category')
+                                              
     # CIRCULATORIAS
-    df['I6'] = df['I6'].astype('category')
-    df['I7'] = df['I7'].astype('category')
-    df['I8'] = df['I8'].astype('category')    
+    df['I6_I8'] = df['I6_I8'].astype('category')    
     
-    df['R0'] = df['R0'].astype('category')
-    df['R1'] = df['R1'].astype('category')
-    df['R2'] = df['R2'].astype('category')
-    df['R3'] = df['R3'].astype('category')
-    df['R4'] = df['R4'].astype('category')
+    df['R0_R4'] = df['R0_R4'].astype('category')
     
     return df
 

@@ -1599,6 +1599,8 @@ def clas_med(df,df_vac):
     df['VACUNAS'] = 0
     df['VASOPRESORES'] = 0
     df['VITAMINAS'] = 0
+    df['GAS MEDICINAL'] = 0
+    df['FORMULA POLIMERICA'] = 0
 
     for i in range(len(df['medicamentos'])):
         x = str(df['medicamentos'][i])
@@ -1851,7 +1853,11 @@ def clas_med(df,df_vac):
                 if(df['VASOPRESORES'][i] ==0): 
                     df['VASOPRESORES'][i] = df_vac['VASOPRESORES'][j]
                 if(df['VITAMINAS'][i] ==0): 
-                    df['VITAMINAS'][i] = df_vac['VITAMINAS'][j]
+                    df['VITAMINAS'][i] = df_vac['VITAMINAS'][j]                    
+                if(df['GAS MEDICINAL'][i] ==0): 
+                    df['GAS MEDICINAL'][i] = df_vac['GAS MEDICINAL'][j]
+                if(df['FORMULA POLIMERICA'][i] ==0): 
+                    df['FORMULA POLIMERICA'][i] = df_vac['FORMULA POLIMERICA'][j]
 
                 
                 

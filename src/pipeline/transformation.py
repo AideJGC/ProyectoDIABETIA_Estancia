@@ -100,6 +100,33 @@ def clean_data_num(df,cols):
     return df
 
 
+def clean_data_in_glucosa(df):
+    df['fecha_laboratorio'] = df['fechas_procesadas'].astype(str)
+    df['fecha_laboratorio'] = np.where(df.fecha_laboratorio.str.len() > 50, \
+                                        "20"+df['fecha_laboratorio'].astype(str).str[6:8]+"-"+
+                                            df['fecha_laboratorio'].astype(str).str[3:5]+"-"+
+                                            df['fecha_laboratorio'].astype(str).str[0:2],\
+                                            df['fecha_laboratorio'])
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].replace(' DE ', '/', regex=True)
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].replace(' DEL ', '/', regex=True)
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].replace('10 / 12/EDAD, CON DX/1', np.nan, regex=True)
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].replace('ABRIL/2012----PACIENTE', np.nan, regex=True)
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].replace('ENERO 2019---------------CONSIENTE', np.nan, regex=True)
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].astype(str)
+
+    #display(df[df["fecha_laboratorio"].apply(lambda x: len(x) > 19)][['fecha_laboratorio','glucosa']])
+
+    df['fecha_laboratorio'] = df['fecha_laboratorio'].astype(str)
+    for i in range(len(df['fecha_laboratorio'])):
+        x = df['fecha_laboratorio'][i]
+        if ('GLUCOSA' in x) & (len(x) > 19) & (pd.isna(df['glucosa'][i])):
+            y = "20"+x[6:8]+"-"+x[3:5]+"-"+x[0:2]
+            df['fecha_laboratorio'][i] = datetime.strptime(y, '%Y-%m-%d') 
+            df['glucosa1'][i] = x[17:len(x)]
+    
+    return df
+
+
 def transform(df ,path_save):
     """
     Recibe la ruta del pickle que hay que transformar y devuelve en una ruta los datos transformados en pickle.
@@ -116,9 +143,10 @@ def transform(df ,path_save):
                             'plaquetas','creatinina','acido_urico','urea','peso',
                             'altura','tfg','imc','año_de_diagnostico_diabetes',
                             'año_de_diagnostico_hipertensión'])
-    # Limpieza de fechas de laboratorios
+    # Limpieza de fechas de laboratorios con datos de glucosa
+    df = clean_data_in_glucosa(df)
 
-    
+
     # Se guarda pkl
     u.save_df(df, path_save)
     print("Archivo 'pkl_transform.pkl' escrito correctamente")   

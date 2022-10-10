@@ -7,7 +7,7 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 sys.path.append(dirname('../src'))
-from src.utils import utils
+from src.utils import utils, processing
 
 def clean_pa_hba1c(df):
     """
@@ -706,6 +706,7 @@ def paste_dx_hta_med(df_f):
     df_h = pd.read_csv("../Data/NewHypertensionList.csv")
     df_h = df_h[['cx_curp','FechaNuevaHipertension']]
     df_f = pd.merge(df_f, df_h, on = ["cx_curp"], how="left")
+    df_f['FechaNuevaHipertension']= pd.to_datetime(df_f['FechaNuevaHipertension'])
     
     return df_f
 
@@ -756,7 +757,7 @@ def transform(df, path_save):
     df_f = paste_dm_hta(df_f, df)
     
     # Pegando DX por Medicamento
-    df_f = paste_dx_hta_med(df_f)
+    df_f = paste_dx_hta_med(df_f)    
 
     # Se guarda pkl
     utils.save_df(df_f, path_save)

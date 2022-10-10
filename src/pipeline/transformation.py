@@ -7,7 +7,7 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 sys.path.append(dirname('../src'))
-from src.utils import utils, processing
+from src.utils import utils
 
 def clean_pa_hba1c(df):
     """

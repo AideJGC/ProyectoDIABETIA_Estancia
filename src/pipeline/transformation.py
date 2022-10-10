@@ -379,7 +379,7 @@ def uniq_lab(df, column_names, column):
     
     # delete dupliacted values in same date
     df_merged = df_column.merge(df_rep, how="left", left_on=["cx_curp","fecha_laboratorio"],\
-                             right_on=["cx_curp","fecha_laboratorio"], indicator=True)
+                                right_on=["cx_curp","fecha_laboratorio"], indicator=True)
     df_merged = df_merged.query("_merge == 'left_only'")[column_names]
     
     # comprobando
@@ -406,6 +406,8 @@ def unir_lab(df1,df2):
 def unique_labs(df):
     """
     """
+    df['fecha_laboratorio']= pd.to_datetime(df['fecha_laboratorio'])
+    #display(df.info())
     df_glucosa = uniq_lab(df.copy(),['cx_curp','glucosa','glucosa1','glucosa2','fecha_laboratorio'],'glucosa')
     df_colesterol = uniq_lab(df.copy(),['cx_curp','colesterol','fecha_laboratorio'],'colesterol')
     df_lab = unir_lab(df_glucosa,df_colesterol)
@@ -479,9 +481,233 @@ def uniq_pac(df):
     # Eliminando duplicados
     df_exp = df_exp.drop_duplicates()
     
+    prop_codigo = df_exp.groupby(['cx_curp','fecha_consulta'], as_index=False)['newid']\
+    .count()\
+    .rename(columns={'newid': 'count'})
+    prop_codigo['prop'] = prop_codigo['count']/np.sum(prop_codigo['count'])
+    df_rep_exp = prop_codigo.sort_values(by = ['prop'], ascending = False)
+    df_rep_exp = df_rep_exp[df_rep_exp['count']>1]
     
-    return df_exp
+    df_u_exp = pd.merge(df_exp,df_rep_exp, on = ['cx_curp','fecha_consulta'])
+    
+    df_ug = df_u_exp[~pd.isna(df_u_exp['glucosa'])]
+    
+    prop_codigo = df_ug.groupby(['cx_curp','fecha_consulta'], as_index=False)['newid']\
+    .count()\
+    .rename(columns={'newid': 'count'})
+    prop_codigo['prop'] = prop_codigo['count']/np.sum(prop_codigo['count'])
+    df_rep_val0 = prop_codigo.sort_values(by = ['prop'], ascending = False)
+    df_rep_val0 = df_rep_val0[df_rep_val0['count']>1]
+    
+    #prop_codigo = df_u_exp.groupby(['fuente'], as_index=False)['newid']\
+    #.count()\
+    #.rename(columns={'newid': 'count'})
+    #prop_codigo['prop'] = prop_codigo['count']/np.sum(prop_codigo['count'])
+    #prop_codigo.sort_values(by = ['prop'], ascending = False)
+    
+    # Colapse information
+    df_collapse = df_u_exp.groupby(['cx_curp','fecha_consulta']).first().reset_index()
+    df_collapse["fuente"] = "corhis_somatometria/exphis_hc_diabetes"
+    prop_codigo = df_collapse.groupby(['fuente'], as_index=False)['newid']\
+    .count()\
+    .rename(columns={'newid': 'count'})
+    prop_codigo['prop'] = prop_codigo['count']/np.sum(prop_codigo['count'])
+    #prop_codigo.sort_values(by = ['prop'], ascending = False)
+    
+    prop_codigo = df_exp.groupby(['cx_curp','fecha_consulta'], as_index=False)['newid']\
+    .count()\
+    .rename(columns={'newid': 'count'})
+    prop_codigo['prop'] = prop_codigo['count']/np.sum(prop_codigo['count'])
+    df_unic_exp = prop_codigo.sort_values(by = ['prop'], ascending = False)
+    df_unic_exp = df_unic_exp[df_unic_exp['count']==1]
+    #df_unic_exp
 
+    df_u1_exp = pd.merge(df_exp,df_unic_exp, on = ['cx_curp','fecha_consulta'])
+    #df_u1_exp
+    
+    # Uniendo datos consulta unicos y collapsados
+    df_exp_his_u = pd.concat([df_u1_exp, df_collapse])
+    
+    return df_exp_his_u
+
+
+def processing_union_cons_lab(df_p):
+    """
+    """
+    # Count repeat
+    df_p['occurance_counter'] = df_p.groupby(['cx_curp','fecha_laboratorio_y'])['fecha_laboratorio_y'].\
+                                         cumcount().add(1)
+    # Dejando unicos laboratorios
+    df_p['fecha_laboratorio_y'] = np.where((df_p['occurance_counter'] > 1) & \
+                                       (df_p['fecha_laboratorio_y'] != np.datetime64('NaT')), \
+                                       np.datetime64('NaT'), 
+                                       df_p['fecha_laboratorio_y'])
+    
+    # Limpiando merge incorrect
+    df_p['index_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['index_y'])
+    df_p['glucosa_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['glucosa_y'])
+    df_p['glucosa1_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['glucosa1_y'])
+    df_p['glucosa2_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['glucosa2_y'])
+    df_p['colesterol_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['colesterol_y'])
+    df_p['trigliceridos_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['trigliceridos_y'])
+    df_p['hdl_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['hdl_y'])
+    df_p['ldl_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['ldl_y'])
+    df_p['presion_arterial_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['presion_arterial_y'])
+    df_p['sistolica_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['sistolica_y'])
+    df_p['diastolica_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['diastolica_y'])
+    df_p['hba1c_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['hba1c_y'])
+    df_p['plaquetas_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['plaquetas_y'])
+    df_p['creatinina_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['creatinina_y'])
+    df_p['acido_urico_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['acido_urico_y'])
+    df_p['urea_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['urea_y'])
+    df_p['peso_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['peso_y'])
+    df_p['altura_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['altura_y'])
+    df_p['tfg_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['tfg_y'])
+    df_p['imc_y'] = np.where(pd.isna(df_p['fecha_laboratorio_y']), np.nan, df_p['imc_y'])
+    
+    df_p.reset_index(inplace = True)
+    
+    # Dejando daos de laboratorios en consulta
+    for i in range(len(df_p['newid'])):     
+    
+        if ~(pd.isna(df_p['fecha_laboratorio_y'][i])):          
+
+            if (((pd.isna(df_p['glucosa_x'][i])) or (df_p['glucosa_x'][i] == 'nan'))) and ~(pd.isna(df_p['glucosa_y'][i])):        
+                df_p['glucosa_x'][i] = df_p['glucosa_y'][i]      
+                df_p['glucosa1_x'][i] = df_p['glucosa1_y'][i]      
+                df_p['glucosa2_x'][i] = df_p['glucosa2_y'][i]
+
+            if (pd.isna(df_p['colesterol_x'][i])) and ~(pd.isna(df_p['colesterol_y'][i])):        
+                df_p['colesterol_x'][i] = df_p['colesterol_y'][i]
+
+            if (pd.isna(df_p['trigliceridos_x'][i])) and ~(pd.isna(df_p['trigliceridos_y'][i])):        
+                df_p['trigliceridos_x'][i] = df_p['trigliceridos_y'][i]
+            if (pd.isna(df_p['hdl_x'][i])) and ~(pd.isna(df_p['hdl_y'][i])):        
+                df_p['hdl_x'][i] = df_p['hdl_y'][i]
+            if (pd.isna(df_p['ldl_x'][i])) and ~(pd.isna(df_p['ldl_y'][i])):        
+                df_p['ldl_x'][i] = df_p['ldl_y'][i]
+            if (pd.isna(df_p['presion_arterial_x'][i])) and ~(pd.isna(df_p['presion_arterial_y'][i])): 
+                df_p['presion_arterial_x'][i] = df_p['presion_arterial_y'][i]
+                df_p['sistolica_x'][i] = df_p['sistolica_y'][i]
+                df_p['diastolica_x'][i] = df_p['diastolica_y'][i]
+            if (pd.isna(df_p['hba1c_x'][i])) and ~(pd.isna(df_p['hba1c_y'][i])):        
+                df_p['hba1c_x'][i] = df_p['hba1c_y'][i]
+            if (pd.isna(df_p['plaquetas_x'][i])) and ~(pd.isna(df_p['plaquetas_y'][i])):        
+                df_p['plaquetas_x'][i] = df_p['plaquetas_y'][i]
+            if (pd.isna(df_p['creatinina_x'][i])) and ~(pd.isna(df_p['creatinina_y'][i])):        
+                df_p['creatinina_x'][i] = df_p['creatinina_y'][i]
+            if (pd.isna(df_p['acido_urico_x'][i])) and ~(pd.isna(df_p['acido_urico_y'][i])):        
+                df_p['acido_urico_x'][i] = df_p['acido_urico_y'][i]
+            if (pd.isna(df_p['urea_x'][i])) and ~(pd.isna(df_p['urea_y'][i])):        
+                df_p['urea_x'][i] = df_p['urea_y'][i]
+            if (pd.isna(df_p['peso_x'][i])) and ~(pd.isna(df_p['peso_y'][i])):        
+                df_p['peso_x'][i] = df_p['peso_y'][i]
+            if (pd.isna(df_p['altura_x'][i])) and ~(pd.isna(df_p['altura_y'][i])):        
+                df_p['altura_x'][i] = df_p['altura_y'][i]
+            if (pd.isna(df_p['tfg_x'][i])) and ~(pd.isna(df_p['tfg_y'][i])):        
+                df_p['tfg_x'][i] = df_p['tfg_y'][i]
+            if (pd.isna(df_p['imc_x'][i])) and ~(pd.isna(df_p['imc_y'][i])):        
+                df_p['imc_x'][i] = df_p['imc_y'][i]
+            
+    # ELIMINANDO COLUMNASNO NECESARIAS
+    df_p.drop(columns=['index_x', 'index_y', 'glucosa_y', 'glucosa1_y', 'glucosa2_y', 'fecha_laboratorio_x', 
+                       'colesterol_y', 'trigliceridos_y', 'hdl_y', 'ldl_y', 'presion_arterial_y', 
+                       'sistolica_y', 'diastolica_y', 'hba1c_y', 'plaquetas_y', 'creatinina_y', 'acido_urico_y', 
+                       'urea_y', 'peso_y', 'altura_y', 'tfg_y', 'imc_y', 
+                       'index','count','prop'], axis=1, inplace=True)
+    # RENOMBRANDOCOLUMNAS RESULTADO DE MERGE
+    df_p.rename(columns = {'fecha_laboratorio_y':'fecha_laboratorio', 'glucosa_x':'glucosa', 'glucosa1_x':'glucosa1',\
+                         'glucosa2_x':'glucosa2', 'colesterol_x':'colesterol', 'trigliceridos_x':'trigliceridos',\
+                         'hdl_x':'hdl', 'ldl_x':'ldl', 'presion_arterial_x':'presion_arterial',\
+                         'sistolica_x':'sistolica', 'diastolica_x':'diastolica', 'hba1c_x':'hba1c', \
+                         'plaquetas_x':'plaquetas', 'creatinina_x':'creatinina', 'acido_urico_x':'acido_urico', \
+                         'urea_x':'urea', 'peso_x':'peso', 'altura_x':'altura', 'tfg_x':'tfg', 'imc_x':'imc', \
+                         'in_consulta_x':'in_consulta'}, inplace = True)
+
+    return df_p    
+
+
+def union_pac_lab(df_exp_his_u, df_lab):
+    """
+    """
+    df_exp_his_u = df_exp_his_u.sort_values(['cx_curp','fecha_consulta']).reset_index()
+    df_lab = df_lab.sort_values(['cx_curp','fecha_laboratorio']).reset_index()
+    
+    # Diferencia entre laboratorios
+    df_lab["dif_date_lab"] = np.nan
+    grp = df_lab.groupby('cx_curp')['fecha_laboratorio']
+    #display(grp)
+    for i, group in grp:  
+        df_lab["dif_date_lab"][df_lab.index.isin(group.index)] = group.sub(group.iloc[0])
+
+    df_lab['dif_date_lab_from_ini'] = df_lab['dif_date_lab'].dt.days.abs()   
+    df_lab["dif_date_lab"] = df_lab.groupby(["cx_curp"])["fecha_laboratorio"].diff().dt.days
+    
+    # Ordenando
+    df_exp_his_u = df_exp_his_u.sort_values(['fecha_consulta'])
+    df_lab = df_lab.sort_values(['fecha_laboratorio'])
+    
+    # Unión de datos cosulta - laboratorio
+    df_f = pd.merge_asof(df_exp_his_u, df_lab,\
+                     left_on='fecha_consulta',\
+                     right_on='fecha_laboratorio',\
+                     by='cx_curp', \
+                     tolerance=pd.Timedelta(days=60),\
+                     direction = 'backward')
+    
+    df_f = processing_union_cons_lab(df_f)    
+    
+    return df_f
+
+
+def paste_dm_hta(df_f, df):
+    """
+    """
+    df_a = df[~pd.isna(df['año_de_diagnostico_diabetes'])][['cx_curp','fecha_consulta','año_de_diagnostico_diabetes']].\
+              sort_values(['cx_curp','fecha_consulta'])
+    
+    df_b = df[~pd.isna(df['año_de_diagnostico_hipertension'])][['cx_curp','fecha_consulta','año_de_diagnostico_hipertension']].\
+              sort_values(['cx_curp','fecha_consulta'])
+
+    a_dx_dm = df.groupby('cx_curp').agg({'año_de_diagnostico_diabetes': ['min']})
+    a_dx_dm = a_dx_dm.reset_index()
+    a_dx_dm.columns = ['cx_curp', 'año_dx_dm']
+    a_dx_dm = a_dx_dm[~pd.isna(a_dx_dm['año_dx_dm'])][['cx_curp', 'año_dx_dm']]
+    a_dx_dm["año_dx_dm"] = a_dx_dm["año_dx_dm"].astype(int)
+    #a_dx_dm
+    
+    a_dx_hta = df.groupby('cx_curp').agg({'año_de_diagnostico_hipertension': ['min']})
+    a_dx_hta = a_dx_hta.reset_index()
+    a_dx_hta.columns = ['cx_curp', 'año_dx_hta']
+    a_dx_hta = a_dx_hta[~pd.isna(a_dx_hta['año_dx_hta'])][['cx_curp', 'año_dx_hta']]
+    a_dx_hta["año_dx_hta"] = a_dx_hta["año_dx_hta"].astype(int)
+    #a_dx_hta
+    
+    df_f = pd.merge(df_f, a_dx_dm, on = "cx_curp", how="left")
+    df_f = pd.merge(df_f, a_dx_hta, on = "cx_curp", how="left")
+    
+    df_f['year_consulta'] = pd.DatetimeIndex(df_f['fecha_consulta']).year
+    
+    df_f['año_dx_dm'] = np.where((~pd.isna(df_f['año_dx_dm'])&(df_f['año_dx_dm']>df_f['year_consulta'])), \
+                                  np.nan, 
+                                  df_f['año_dx_dm'])
+    df_f['año_dx_hta'] = np.where((~pd.isna(df_f['año_dx_hta'])&(df_f['año_dx_hta']>df_f['year_consulta'])), \
+                                   np.nan, 
+                                   df_f['año_dx_hta'])
+    df_f.drop(['nota_medica', 'fecha', 'hipertension', 'año_de_diagnostico_diabetes', \
+               'año_de_diagnostico_hipertension','fechas_procesadas','bandera_fechas_procesadas'], axis=1, inplace=True)
+        
+    return df_f
+
+
+def paste_dx_hta_med(df_f):
+    """
+    """
+    df_h = pd.read_csv("../Data/NewHypertensionList.csv")
+    df_h = df_h[['cx_curp','FechaNuevaHipertension']]
+    df_f = pd.merge(df_f, df_h, on = ["cx_curp"], how="left")
+    
+    return df_f
 
 def transform(df, path_save):
     """
@@ -522,9 +748,18 @@ def transform(df, path_save):
     # Pacientes únicos por fuente
     df_exp = uniq_pac(df)
     
+    # Uniendo pacientes únicos a laboratorios
+    df_f = union_pac_lab(df_exp, df_lab)
+    #display(df_union)
+    
+    # Años DM y HTA
+    df_f = paste_dm_hta(df_f, df)
+    
+    # Pegando DX por Medicamento
+    df_f = paste_dx_hta_med(df_f)
 
     # Se guarda pkl
-    utils.save_df(df, path_save)
+    utils.save_df(df_f, path_save)
     print("Finalizó proceso:  Transformación y limpieza")
     
-    return df
+    return df_f

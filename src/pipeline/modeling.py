@@ -130,42 +130,93 @@ def training(df_fe):
     auto_variables = auto_selection_variables(X_train_id, y_train)
     models = train_models(X_train_id, y_train, auto_variables)
     print("Se concluye proceso de entrenamiento con datos completos en  ", time.time() - start_time, ' segundos')
-    model_and_features = {'models': models, 'features': auto_variables}        
+    model_and_features = {'models': models, 'features': auto_variables}  
+    
     return model_and_features
 
 
-def get_best_model()
+def best_model(models, path_save): 
+    
+    scores = []
+    best_estimator = []
+    for i in range(len(models['models'])):
+            scores.append(models['models'][i].best_score_) 
+            best_estimator.append(models['models'][i].best_estimator_) 
 
-
-
-def feature_engineering(df, path_save):
-    """
-    Recibe la ruta del pickle transformado y devuelve un pickle con nuevos features 
-    en una ruta epecificada
-    :param: path
-    :return: file
-    """
-    print("Inicio proceso: Feature_engineering")    
-    # Crea nuevas variables
-    df = create_new_features(df)
+    max_score = max(scores)  
+    max_score_index = scores.index(max_score)
+    best_model = {
+        'best_model': best_estimator[max_score_index],
+        'features': models['features']
+    }    
     
-    # Pegando atributos medicamentos
-    df = cat_med_data_add(df)
-    
-    # Clasificación lista mexicana
-    df = processing.lista_mex_enf(df)
-    
-    # Grupo de medicamentos IMSS
-    df = gpo_med(df)
-    
-    # Label
-    df['target_hta'] = df['hta_nvo_ce']
-    
-    # Creación de ventanas
-    df_f = create_window(df, 3)
-        
     # Se guarda pkl
-    utils.save_df(df_f, path_save)
-    print("Finalizó proceso: Feature_engineering")
+    utils.save_df(best_model, path_save)
     
-    return df_f
+    print(best_model)
+
+    return best_model
+
+
+def predict(df_fe, model):
+    """
+    Recibe el data frame a predecir, regresa los labesl y scores predichos
+    """
+    
+    auto_variables = model["features"]
+    best_model = model["best_model"]
+
+    X_train_id, X_test_id, y_train,y_test = train_test(df_fe)
+    predicted_labels = best_model.predict(X_test_id[auto_variables])
+    predicted_scores = best_model.predict_proba(X_test_id[auto_variables])
+    
+    # Punto de corte con recall
+    fpr, tpr, thresholds_roc = roc_curve(y_test, predicted_scores[:,1], pos_label=1)
+    s1=pd.Series(thresholds_roc,name='threshold')
+    s2=pd.Series(fpr,name='false_pr')
+    s3=pd.Series(tpr ,name='true_pr')
+    df_threshold_roc = pd.concat([s1,s2,s3], axis=1)
+    recall = 0.8
+    threshold_recall = round(df_threshold_roc[df_threshold_roc.false_pr == df_threshold_roc[df_threshold_roc.true_pr >= recall ].false_pr.min()].threshold, 2).max()
+    
+    # Resultados 
+    predict_proba = pd.DataFrame(predicted_scores[:,1])
+    terminos_threshold = predict_proba > threshold_recall
+
+    score = terminos_threshold[0]
+    score = score.replace(True,1).replace(False,0)
+    score = score.to_numpy()
+
+    results = pd.DataFrame(y_test)
+    results['score'] = score 
+    results['pred_score'] = predict_proba.values
+    
+    results_confusion_matrix =  pd.DataFrame(results[['label', 'score']].value_counts()).sort_values('label')
+    results_confusion_matrix
+    
+    # Regresando a una sola columna el one hot encoding de la variable tipo de inspección
+    X_test_id['type_inspection_limpia'] = X_test_id[['type_canvass','type_license','type_licuor','type_complaint',
+                                          'type_reinsp','type_illegal','type_not_ready','type_out_of_buss',
+                                          'type_prelicense','type_others']].idxmax(axis=1) 
+                                    
+    results_conjunto = pd.concat([results,X_test_id], axis=1)
+    
+    #Leyendo variables de inicio
+    if inicial:
+         file_name = 'processed-data/clean-historic-inspections-{}.pkl'.format(date_input.strftime('%Y-%m-%d'))
+    else:
+         file_name = 'processed-data/clean-consecutive-inspections-{}.pkl'.format(date_input.strftime('%Y-%m-%d'))
+
+    
+    s3 = get_s3_client(cte.CREDENTIALS)
+    s3_object = s3.get_object(Bucket = cte.BUCKET, Key = file_name)
+    body = s3_object['Body']
+    my_pickle = pickle.loads(body.read())
+
+    df_clean = pd.DataFrame(my_pickle)
+    
+
+    df_clean_results = df_clean[['inspection_id', 'dba_name', 'facility_type', 'inspection_type']]
+    results_conjunto_original = results_conjunto.merge(df_clean_results, on='inspection_id', how='left')
+    
+    return results_conjunto_original

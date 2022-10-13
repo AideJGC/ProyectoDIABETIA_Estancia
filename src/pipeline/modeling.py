@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import time
 from os.path import dirname
 from datetime import datetime
 import warnings
@@ -13,6 +14,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
+from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.metrics import accuracy_score, precision_recall_curve, precision_score, recall_score
+from sklearn.metrics import confusion_matrix, plot_confusion_matrix
+import matplotlib.pyplot as plt
 
 def train_test(df): 
     """
@@ -23,12 +28,12 @@ def train_test(df):
     Y = df[["label"]]
     
     np.random.seed(2021)
-    X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size=0.3,random_state=4)
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3,random_state=4)
     print('Muestreo estratificado train/test completado satisfactoriamente')   
-    return (X_train_id, X_test_id, y_train, y_test)
+    return (X_train, X_test, y_train, y_test)
 
     
-def auto_selection_variables (X_train_id, y_train):
+def auto_selection_variables (X_train, y_train):
     
     # Parámetros para la mejor selección de variables
     grid_param = {
@@ -46,7 +51,7 @@ def auto_selection_variables (X_train_id, y_train):
                          cv=2)
     
     gd_sr.fit(X_train, y_train)
-    best_e = gs.best_estimator_
+    best_e = gd_sr.best_estimator_
     cols= X_train.columns
 
     feature_importance = pd.DataFrame({'importance': best_e.feature_importances_,
@@ -57,7 +62,7 @@ def auto_selection_variables (X_train_id, y_train):
     return (auto_selection_variables)
 
 
-def magic_loop(algorithms, features, labels, scoring_met):
+def magic_loop(estimators_dict, algorithms_dict, grid_search_dict, algorithms, features, labels, scoring_met):
     best_estimators = []
     for algorithm in algorithms:
         estimator = estimators_dict[algorithm]
@@ -117,7 +122,7 @@ def train_models(X_train_id, y_train, auto_variables):
     start_time = time.time()
     models_list = []
    
-    models = magic_loop(algorithms, X_train, y_train)
+    models = magic_loop(estimators_dict, algorithms_dict, grid_search_dict, algorithms, X_train, y_train, scoring_met)
     return (models)
 
 
@@ -126,19 +131,89 @@ def training(df_fe):
     print("Inicia proceso de entrenamiento de modelos")
     start_time = time.time()
     
-    X_train_id, X_test_id, y_train, y_test = train_test(df_fe)
-    auto_variables = auto_selection_variables(X_train_id, y_train)
-    models = train_models(X_train_id, y_train, auto_variables)
+    X_train, X_test, y_train, y_test = train_test(df_fe)
+    auto_variables = auto_selection_variables(X_train, y_train)
+    models = train_models(X_train, y_train, auto_variables)
     print("Se concluye proceso de entrenamiento con datos completos en  ", time.time() - start_time, ' segundos')
     model_and_features = {'models': models, 'features': auto_variables}  
     
-    return model_and_features
+    return model_and_features, X_test, y_test
 
 
-def best_model(models, path_save): 
+def param_graf(y_true, y_scores):
+    k_values = np.linspace(0, 0.99, 100)
+    lista = []
+
+    for k in k_values:
+        p_k = precision_at_k(y_true, pd.DataFrame(y_scores)[1], k)
+        r_k = recall_at_k(y_true, pd.DataFrame(y_scores)[1], k)
+        lista = lista + [[p_k, r_k, k]]
+
+    p_r_g = pd.DataFrame(lista, columns=["p_k", "r_k", "k"])
+
+    return p_r_g
+
+def precision_at_k(y_true, y_scores, k):
+    threshold = np.sort(y_scores)[::-1][int(k * len(y_scores))]
+    y_pred = np.asarray([1 if i >= threshold else 0 for i in y_scores])
+
+    return precision_score(y_true, y_pred)
+
+def recall_at_k(y_true, y_scores, k):
+    threshold = np.sort(y_scores)[::-1][int(k * len(y_scores))]
+    y_pred = np.asarray([1 if i >= threshold else 0 for i in y_scores])
+
+    return recall_score(y_true, y_pred)
+
+
+def print_results_model(X_test, y_test, model):
+    """
+    """
+    predicted_labels = model.predict(X_test)
+    predicted_scores = model.predict_proba(X_test)
+    
+    ### Curva ROC
+    plt.figure()
+    fpr, tpr, thresholds = roc_curve(y_test, predicted_scores[:, 1], pos_label=1)
+    plt.clf()
+    plt.plot([0, 1], [0, 1], 'k--', c="red")
+    plt.plot(fpr, tpr)
+    plt.title("ROC best RF, AUC: {}".format(roc_auc_score(y_test, predicted_labels)))
+    plt.xlabel("fpr")
+    plt.ylabel("tpr")
+    plt.savefig('../output/ROC_curve.png', bbox_inches='tight')
+    #plt.show()
+    cm = plot_confusion_matrix(model, X_test, y_test, cmap=plt.cm.Blues)  
+    cm.figure_.savefig('../output/confusion_matrix.png',dpi=300)
+    
+    # Precision and recall at k%
+    data_junta = pd.concat([X_test, y_test], axis=1)
+    data_filtrada = data_junta
+    datos_finales_X = pd.DataFrame(data_filtrada.drop(['label'], axis=1))
+    y_true = data_filtrada.label
+    y_scores = model1.predict_proba(datos_finales_X)
+    
+    p_r_g = param_graf(y_true, y_scores)
+
+    plt.figure()
+    plt.plot(p_r_g["k"], p_r_g["p_k"], label="P")
+    plt.plot(p_r_g["k"], p_r_g["r_k"], label="R")
+    plt.title("Precision and recall at k%: PA")
+    plt.axvline(x=0.037, c='red', linestyle='--')
+    plt.ylabel("Mejor valor")
+    plt.legend(['Precision', 'Recall'])
+    plt.xlabel("%k")
+    plt.savefig('../output/recall_precision_k.png', bbox_inches='tight')
+    #plt.show()
+
+
+def best_model(models, X_test, y_test, path_save): 
     
     scores = []
     best_estimator = []
+    
+    print(len(models['models']))
+    
     for i in range(len(models['models'])):
             scores.append(models['models'][i].best_score_) 
             best_estimator.append(models['models'][i].best_estimator_) 
@@ -149,6 +224,9 @@ def best_model(models, path_save):
         'best_model': best_estimator[max_score_index],
         'features': models['features']
     }    
+    
+    # Print results best model
+    print_results_model(X_test, y_test, best_model['best_model'])
     
     # Se guarda pkl
     utils.save_df(best_model, path_save)
@@ -161,8 +239,7 @@ def best_model(models, path_save):
 def predict(df_fe, model):
     """
     Recibe el data frame a predecir, regresa los labesl y scores predichos
-    """
-    
+    """    
     auto_variables = model["features"]
     best_model = model["best_model"]
 

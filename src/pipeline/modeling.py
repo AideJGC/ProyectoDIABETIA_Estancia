@@ -166,9 +166,14 @@ def recall_at_k(y_true, y_scores, k):
     return recall_score(y_true, y_pred)
 
 
-def print_results_model(X_test, y_test, model):
+def print_results_model(X_test, y_test, best_model):
     """
     """
+    model = best_model['best_model']
+    
+    col = list(best_model['features'])
+    X_test = X_test.filter(col)
+    
     predicted_labels = model.predict(X_test)
     predicted_scores = model.predict_proba(X_test)
     
@@ -191,7 +196,7 @@ def print_results_model(X_test, y_test, model):
     data_filtrada = data_junta
     datos_finales_X = pd.DataFrame(data_filtrada.drop(['label'], axis=1))
     y_true = data_filtrada.label
-    y_scores = model1.predict_proba(datos_finales_X)
+    y_scores = model.predict_proba(datos_finales_X)
     
     p_r_g = param_graf(y_true, y_scores)
 
@@ -211,9 +216,6 @@ def best_model(models, X_test, y_test, path_save):
     
     scores = []
     best_estimator = []
-    
-    print(len(models['models']))
-    
     for i in range(len(models['models'])):
             scores.append(models['models'][i].best_score_) 
             best_estimator.append(models['models'][i].best_estimator_) 
@@ -224,76 +226,73 @@ def best_model(models, X_test, y_test, path_save):
         'best_model': best_estimator[max_score_index],
         'features': models['features']
     }    
-    
+        
     # Print results best model
-    print_results_model(X_test, y_test, best_model['best_model'])
+    print_results_model(X_test, y_test, best_model)
     
     # Se guarda pkl
     utils.save_df(best_model, path_save)
     
-    print(best_model)
-
     return best_model
 
 
-def predict(df_fe, model):
+def predict(df_fe, path_model, path_save_predict):
     """
     Recibe el data frame a predecir, regresa los labesl y scores predichos
-    """    
-    auto_variables = model["features"]
-    best_model = model["best_model"]
+    """   
+    best_model = utils.load_df(path_model)
+    
+    auto_variables = best_model["features"]
+    model = best_model['best_model']
+    
+    col = list(auto_variables)
+    X_val = df_fe.filter(col)
+    
+    predicted_labels = model.predict(X_val)
+    predicted_scores = model.predict_proba(X_val)
+        
+    df_pred = pd.DataFrame()
+    
+    df_pred['cx_curp'] = df_fe['cx_curp']
+    df_pred['ventana'] = df_fe['ventana']
+    df_pred['predicted_labels'] = pd.DataFrame(predicted_labels, columns = ['predicted_labels'])   
+    # Se guarda pkl
+    utils.save_df(df_pred, path_save_predict)
+    
+    df1 = df_pred.groupby("cx_curp").last()    
+    df1.rename(columns = {'ventana':'Última ventana', 'predicted_labels':'Predicción'}, inplace = True)
+    
+    #print("Predicciones en última ventana")
+    #display(df1)
+    
+    #print("\n")
+    #print("Busquéda predicción de HTA en alguna ventana (última)")
+    
+    idx = df_pred[['cx_curp','predicted_labels']].\
+          groupby(['cx_curp'])['predicted_labels'].\
+          transform(max) == df_pred['predicted_labels']
+    
+    df2 = df_pred[idx].groupby("cx_curp").last()
+    
+    df2.rename(columns = {'ventana':'Ventana pred max', 'predicted_labels':'Predicción max'}, inplace = True)
+    
+    #display(df2)
+        
+    df = pd.merge(df1, df2, on ='cx_curp')
+    
+    df3 = df_pred.groupby(['cx_curp','predicted_labels'])['ventana'].count()
+    df3 = pd.DataFrame(df3)
+    df3 = df3.pivot_table('ventana', ['cx_curp'], 'predicted_labels')
 
-    X_train_id, X_test_id, y_train,y_test = train_test(df_fe)
-    predicted_labels = best_model.predict(X_test_id[auto_variables])
-    predicted_scores = best_model.predict_proba(X_test_id[auto_variables])
+    #display(df3)
     
-    # Punto de corte con recall
-    fpr, tpr, thresholds_roc = roc_curve(y_test, predicted_scores[:,1], pos_label=1)
-    s1=pd.Series(thresholds_roc,name='threshold')
-    s2=pd.Series(fpr,name='false_pr')
-    s3=pd.Series(tpr ,name='true_pr')
-    df_threshold_roc = pd.concat([s1,s2,s3], axis=1)
-    recall = 0.8
-    threshold_recall = round(df_threshold_roc[df_threshold_roc.false_pr == df_threshold_roc[df_threshold_roc.true_pr >= recall ].false_pr.min()].threshold, 2).max()
+    df4 = pd.merge(df, df3, on ='cx_curp')
     
-    # Resultados 
-    predict_proba = pd.DataFrame(predicted_scores[:,1])
-    terminos_threshold = predict_proba > threshold_recall
-
-    score = terminos_threshold[0]
-    score = score.replace(True,1).replace(False,0)
-    score = score.to_numpy()
-
-    results = pd.DataFrame(y_test)
-    results['score'] = score 
-    results['pred_score'] = predict_proba.values
+    ##print(list(df4.columns))
     
-    results_confusion_matrix =  pd.DataFrame(results[['label', 'score']].value_counts()).sort_values('label')
-    results_confusion_matrix
+    df4.rename(columns = {0:'Total pred. no HTA', 1:'Total pred. si HTA'}, inplace = True)
     
-    # Regresando a una sola columna el one hot encoding de la variable tipo de inspección
-    X_test_id['type_inspection_limpia'] = X_test_id[['type_canvass','type_license','type_licuor','type_complaint',
-                                          'type_reinsp','type_illegal','type_not_ready','type_out_of_buss',
-                                          'type_prelicense','type_others']].idxmax(axis=1) 
-                                    
-    results_conjunto = pd.concat([results,X_test_id], axis=1)
+    print("Predicción")
+    display(df4)
     
-    #Leyendo variables de inicio
-    if inicial:
-         file_name = 'processed-data/clean-historic-inspections-{}.pkl'.format(date_input.strftime('%Y-%m-%d'))
-    else:
-         file_name = 'processed-data/clean-consecutive-inspections-{}.pkl'.format(date_input.strftime('%Y-%m-%d'))
-
-    
-    s3 = get_s3_client(cte.CREDENTIALS)
-    s3_object = s3.get_object(Bucket = cte.BUCKET, Key = file_name)
-    body = s3_object['Body']
-    my_pickle = pickle.loads(body.read())
-
-    df_clean = pd.DataFrame(my_pickle)
-    
-
-    df_clean_results = df_clean[['inspection_id', 'dba_name', 'facility_type', 'inspection_type']]
-    results_conjunto_original = results_conjunto.merge(df_clean_results, on='inspection_id', how='left')
-    
-    return results_conjunto_original
+    return df_pred

@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 from os.path import dirname
 import warnings
 warnings.filterwarnings('ignore')
@@ -22,7 +23,8 @@ file_data = sys.argv[2]
 def main():
     # Entrenamiento
     if (ent_pred == "1"):
-        print("Iniciando entrenamiento--------------------------------------------------------------")
+        print("Iniciando entrenamiento---------------------------------------------------------------")
+        start_time = time.time()
         df = ingestion.ingesta_data(file_data, "../Data/data.pkl")
         df = transformation.transform(df, "../Data/transformation.pkl")
         df = feature_engineering.feature_engineering(df, "../Data/feature_eng.pkl")
@@ -30,17 +32,20 @@ def main():
         #df_curp = df[["cx_curp"]]
         model_and_features, X_test, y_test = modeling.training(df_m)
         model = modeling.best_model(model_and_features, X_test, y_test, "../Data/best_model.pkl")
-        print("Finaliza entrenamiento ---------------------------------------------------------------")
+        print("Finaliza entrenamiento en ", time.time() - start_time, " segundos")
+        print("--------------------------------------------------------------------------------------")
         
     # Predicci�n
     elif (ent_pred == "2"):
         print("Comenzando predicci�n ----------------------------------------------------------------")
+        start_time = time.time()
         df = ingestion.ingesta_data(file_data, "../Data/new_data.pkl")
         df['hba1c'] = df['hba1c'].astype(str)
         df = transformation.transform(df, "../Data/new_transformation.pkl")
         df = feature_engineering.feature_engineering(df, "../Data/new_data_fe.pkl")
         df = modeling.predict(df, "../Data/best_model.pkl", "../Data/save_new_predict.pkl")
-        print("Fin predicci�n ----------------------------------------------------------------")
+        print("Fin predicci�n en ", time.time() - start_time, " segundos")
+        print("--------------------------------------------------------------------------------------")
     else:
         print("Argumentos incorrectos")
     pass

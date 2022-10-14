@@ -293,6 +293,6 @@ def predict(df_fe, path_model, path_save_predict):
     df4.rename(columns = {0:'Total pred. no HTA', 1:'Total pred. si HTA'}, inplace = True)
     
     print("Predicción")
-    display(df4)
+    print(df4)
     
     return df_pred

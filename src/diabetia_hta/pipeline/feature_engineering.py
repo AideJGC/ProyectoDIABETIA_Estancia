@@ -371,7 +371,7 @@ def cat_med_data_add(df):
     """
     """
     # Lectura de catalogo
-    df_vac = pd.read_csv("../Data/med2.csv", encoding='ISO-8859-1')
+    df_vac = pd.read_csv("../data/med2.csv", encoding='ISO-8859-1')
     df_vac = df_vac.rename(columns={'ANTIMIGRAÃ\x91OSOS': 'ANTIMIGRANOSOS'})
     df = processing.clas_med(df,df_vac)
     
@@ -381,7 +381,7 @@ def cat_med_data_add(df):
 def gpo_med(df):
     """
     """
-    df_m = pd.read_csv("../Data/CBM4.csv", encoding='ISO-8859-1')
+    df_m = pd.read_csv("../data/CBM4.csv", encoding='ISO-8859-1')
     df_m = df_m.drop(['id','Grupo','Producto_Activo','Cve_Med.1','Cve_Med','GPO','GPO1','ESP','DIF',
                       'VAR','CUADRO_BASICO_SAI','PROGRAMA_MEDICO','Unidades', 'Medida','GRUPO'], axis=1)
     df_m = df_m.rename(columns={'g1_ANALGESICOS': 'g1','g2_ANESTESIA': 'g2'})

@@ -21,10 +21,11 @@ RUN pip3 install $JUPYTERLAB
 RUN jupyter notebook --generate-config && \
     sed -i "s/# c.NotebookApp.password = .*/c.NotebookApp.password = u'sha1:115e429a919f:21911277af52f3e7a8b59380804140d9ef3e2380'/" ~/.jupyter/jupyter_notebook_config.py
 
+WORKDIR /
+COPY requirements.txt requirements.txt
+
 RUN pip3 install -r requirements.txt
 RUN pip3 install git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
-
-WORKDIR /
 
 ENV NB_PREFIX myurl
 

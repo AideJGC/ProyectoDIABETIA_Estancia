@@ -1,3 +1,4 @@
+#
 FROM ubuntu:20.04
 USER root
 ENV TIMEZONE America/Mexico_City
@@ -24,7 +25,8 @@ WORKDIR /
 COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
-RUN pip3 install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
+# RUN pip3 install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
+RUN pip install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git#egg=diabetia_hta&subdirectory=src
 
 ENV NB_PREFIX myurl
 

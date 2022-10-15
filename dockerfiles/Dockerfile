@@ -26,7 +26,7 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 # RUN pip3 install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
-RUN pip install -e --quiet "git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git#egg=diabetia_hta&subdirectory=src"
+RUN pip install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git#egg=diabetia_hta&subdirectory=src
 
 ENV NB_PREFIX myurl
 

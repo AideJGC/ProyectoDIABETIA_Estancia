@@ -703,7 +703,7 @@ def paste_dm_hta(df_f, df):
 def paste_dx_hta_med(df_f):
     """
     """
-    df_h = pd.read_csv("../Data/NewHypertensionList.csv")
+    df_h = pd.read_csv("../data/NewHypertensionList.csv")
     df_h = df_h[['cx_curp','FechaNuevaHipertension']]
     df_f = pd.merge(df_f, df_h, on = ["cx_curp"], how="left")
     df_f['FechaNuevaHipertension']= pd.to_datetime(df_f['FechaNuevaHipertension'])

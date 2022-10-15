@@ -25,7 +25,7 @@ WORKDIR /
 COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
-RUN pip3 install git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
+RUN pip3 install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
 
 ENV NB_PREFIX myurl
 

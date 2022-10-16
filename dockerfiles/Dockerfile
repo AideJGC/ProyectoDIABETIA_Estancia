@@ -25,12 +25,8 @@ WORKDIR /
 COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
-# RUN pip3 install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
-#RUN pip install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git#egg=diabetia_hta&subdirectory=src
 
-RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git
+RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia
 
-#ENV NB_PREFIX myurl
-WORKDIR ProyectoDIABETIA_Estancia/src/diabetia_hta
-#ENTRYPOINT ["/usr/local/bin/jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--LabApp.allow_origin='*'", "--LabApp.base_url=myurl"]
+#WORKDIR ProyectoDIABETIA_Estancia/src/diabetia_hta
 ENTRYPOINT ["python", "diabetia_hta.py"]

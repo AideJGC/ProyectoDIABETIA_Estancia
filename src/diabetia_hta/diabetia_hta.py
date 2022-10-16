@@ -6,7 +6,6 @@ import warnings
 warnings.filterwarnings('ignore')
 sys.path.append(dirname('../../src'))
 from src.pipeline import ingestion, transformation, feature_engineering, modeling
-from src.utils import utils
 
 # RUN
 # python diabetia_hta.py 1 "aide.csv"
@@ -26,10 +25,9 @@ def main():
     if (ent_pred == "1"):
         print("Iniciando entrenamiento---------------------------------------------------------------")
         start_time = time.time()
-        #df = ingestion.ingesta_data(file_data, "../../data/data.pkl")
-        #df = transformation.transform(df, "../../data/transformation.pkl")
-        #df = feature_engineering.feature_engineering(df, "../../data/feature_eng.pkl")
-        df = utils.load_df("../../Data/feature_eng.pkl")
+        df = ingestion.ingesta_data(file_data, "../../data/data.pkl")
+        df = transformation.transform(df, "../../data/transformation.pkl")
+        df = feature_engineering.feature_engineering(df, "../../data/feature_eng.pkl")
         df_m = df.loc[:, df.columns != 'cx_curp']
         #df_curp = df[["cx_curp"]]
         model_and_features, X_test, y_test = modeling.training(df_m)

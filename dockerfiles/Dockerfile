@@ -4,12 +4,14 @@ ENV TIMEZONE America/Mexico_City
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
-#ENV DEB_BUILD_DEPS="python3-dev python3-pip python3-setuptools"
+ENV DEB_BUILD_DEPS="python3-dev python3-pip python3-setuptools"
 ENV DEB_PACKAGES="sudo nano less git wget curl ca-certificates"
 #ENV JUPYTERLAB="jupyter-client==5.3.4 jupyterlab==2.3.2 qtconsole==5.2.1 nbconvert==5.6.1 jupyter-console==6.4.0 ipykernel==6.6.0 MarkupSafe==2.0.1"
 
 RUN apt-get update && export $DEBIAN_FRONTEND && \
     echo $TIMEZONE > /etc/timezone && apt-get install -y tzdata
+
+RUN apt-get update && apt-get install -y $DEB_PACKAGES $DEB_BUILD_DEPS && pip3 install --upgrade pip
 
 # Install python 3.7
 RUN apt install software-properties-common -y
@@ -22,11 +24,8 @@ RUN export PATH=${PATH}:/usr/bin/python3.7
 RUN /bin/bash -c "source ~/.bashrc"
  
 # Install pip
-#RUN apt install python3-pip -y
-#RUN python -m pip install --upgrade pip
-
-#RUN apt-get update && apt-get install -y $DEB_PACKAGES $DEB_BUILD_DEPS && pip3 install --upgrade pip
-RUN apt-get update && apt-get install -y $DEB_PACKAGES && pip3 install --upgrade pip
+RUN apt install python3-pip -y
+RUN python -m pip install --upgrade pip
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && apt-get install -y nodejs
 

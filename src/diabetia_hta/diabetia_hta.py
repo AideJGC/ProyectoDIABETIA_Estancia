@@ -43,7 +43,7 @@ def main():
         df['hba1c'] = df['hba1c'].astype(str)
         df = transformation.transform(df, "../../data/new_transformation.pkl")
         df = feature_engineering.feature_engineering(df, "../../data/new_data_fe.pkl")
-        df = modeling.predict(df, "../data/best_model.pkl", "../../data/save_new_predict.pkl")
+        df = modeling.predict(df, "../../data/best_model.pkl", "../../data/save_new_predict.pkl")
         print("Fin predicci�n en ", time.time() - start_time, " segundos")
         print("--------------------------------------------------------------------------------------")
     else:

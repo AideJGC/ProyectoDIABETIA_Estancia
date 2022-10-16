@@ -37,9 +37,9 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && apt-get i
 WORKDIR /
 RUN mkdir ProyectoDIABETIA_Estancia
 
-COPY requirements.txt requirements.txt
+COPY requirements2.txt requirements2.txt
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements2.txt
 #WORKDIR /ProyectoDIABETIA_Estancia
 
 #RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia

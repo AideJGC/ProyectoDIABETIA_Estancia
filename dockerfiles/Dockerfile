@@ -27,7 +27,7 @@ RUN pip3 install -r requirements.txt
 # RUN pip3 install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia
 #RUN pip install -e git+https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git#egg=diabetia_hta&subdirectory=src
 
-RUN git clone git@github.com:janakerman/ProyectoDIABETIA_Estancia.git
+RUN git clone git@github.com:AideJGC/ProyectoDIABETIA_Estancia.git
 
 #ENV NB_PREFIX myurl
 RUN cd src/diabetia_hta

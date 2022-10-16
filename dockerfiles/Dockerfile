@@ -14,12 +14,18 @@ RUN apt-get update && export $DEBIAN_FRONTEND && \
 
 RUN apt-get update && apt-get install -y $DEB_PACKAGES $DEB_BUILD_DEPS && pip3 install --upgrade pip
 
+# Add 3.7 to the available alternatives
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+
+# Set python3.7 as the default python
+RUN update-alternatives --set python /usr/bin/python3.7
+
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && apt-get install -y nodejs
 
-RUN pip3 install $JUPYTERLAB
+#RUN pip3 install $JUPYTERLAB
 
-RUN jupyter notebook --generate-config && \
-    sed -i "s/# c.NotebookApp.password = .*/c.NotebookApp.password = u'sha1:115e429a919f:21911277af52f3e7a8b59380804140d9ef3e2380'/" ~/.jupyter/jupyter_notebook_config.py
+#RUN jupyter notebook --generate-config && \
+#    sed -i "s/# c.NotebookApp.password = .*/c.NotebookApp.password = u'sha1:115e429a919f:21911277af52f3e7a8b59380804140d9ef3e2380'/" ~/.jupyter/jupyter_notebook_config.py
 
 WORKDIR /
 RUN mkdir ProyectoDIABETIA_Estancia
@@ -28,7 +34,8 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 WORKDIR /ProyectoDIABETIA_Estancia
-RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia ProyectoDIABETIA_Estancia
+
+RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia
 
 #WORKDIR ProyectoDIABETIA_Estancia/src/diabetia_hta
 ENTRYPOINT ["python", "diabetia_hta.py"]

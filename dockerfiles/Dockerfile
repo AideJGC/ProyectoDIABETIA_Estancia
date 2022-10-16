@@ -24,8 +24,8 @@ RUN export PATH=${PATH}:/usr/bin/python3.7
 RUN /bin/bash -c "source ~/.bashrc"
  
 # Install pip
-RUN apt install python3-pip -y
-RUN python -m pip install --upgrade pip
+#RUN apt install python3-pip -y
+#RUN python -m pip install --upgrade pip
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && apt-get install -y nodejs
 

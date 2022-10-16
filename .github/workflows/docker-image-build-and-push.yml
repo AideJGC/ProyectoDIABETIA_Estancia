@@ -38,4 +38,4 @@ jobs:
           file: dockerfiles/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: 4id3jgc/docker_diabetia_hta:0.1
+          tags: 4id3jgc/docker_diabetia_hta:0.2

@@ -31,6 +31,6 @@ RUN pip3 install -r requirements.txt
 RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia.git
 
 #ENV NB_PREFIX myurl
-RUN cd src/diabetia_hta
+WORKDIR ProyectoDIABETIA_Estancia/src/diabetia_hta
 #ENTRYPOINT ["/usr/local/bin/jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--LabApp.allow_origin='*'", "--LabApp.base_url=myurl"]
 ENTRYPOINT ["python", "diabetia_hta.py"]

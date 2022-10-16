@@ -26,7 +26,7 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia
+RUN git clone https://github.com/AideJGC/ProyectoDIABETIA_Estancia ProyectoDIABETIA_Estancia
 
 #WORKDIR ProyectoDIABETIA_Estancia/src/diabetia_hta
 ENTRYPOINT ["python", "diabetia_hta.py"]

@@ -194,26 +194,29 @@ def fecha_ini_fin(fecha_ini):
     fecha_ini = pd.to_datetime(fecha_ini)
     fecha_ini = pd.Timestamp(fecha_ini)
     
-    a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
-    a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
-    a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
+    periodo = 1 # 1-Año; 2 - 3 meses
     
-    #a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
-    #a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
-    #a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')
+    if(periodo == 1):        
+        a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
+        a_inter = fecha_ini+pd.to_timedelta(2*365, unit = 'D')
+        a_fin = fecha_ini+pd.to_timedelta(3*365, unit = 'D')
+        
+        i = a_ini.strftime('%Y-%m-%d')
+        i_t = a_inter.strftime('%Y-%m-%d')
+        f = a_fin.strftime('%Y-%m-%d')
+
+        i = dias_year(i)
+        i_t = dias_year(i_t)
+        f = dias_year(f)  
     
-    i = a_ini.strftime('%Y-%m-%d')
-    i_t = a_inter.strftime('%Y-%m-%d')
-    f = a_fin.strftime('%Y-%m-%d')
-    
-    i = dias_year(i)
-    i_t = dias_year(i_t)
-    f = dias_year(f)    
-    
-    
-    #i = 45
-    #i_t = 90
-    #f = 30 
+    else:
+        a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
+        a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
+        a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')
+        
+        i = 45
+        i_t = 90
+        f = 30 
     
     
     a_ini = fecha_ini+pd.to_timedelta(i, unit = 'D')

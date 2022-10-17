@@ -640,8 +640,8 @@ def union_pac_lab(df_exp_his_u, df_lab):
     for i, group in grp:  
         df_lab["dif_date_lab"][df_lab.index.isin(group.index)] = group.sub(group.iloc[0])
 
-    df_lab['dif_date_lab_from_ini'] = df_lab['dif_date_lab'].dt.days.abs()   
-    df_lab["dif_date_lab"] = df_lab.groupby(["cx_curp"])["fecha_laboratorio"].diff().dt.days
+    #df_lab['dif_date_lab_from_ini'] = df_lab['dif_date_lab'].dt.days.abs()   
+    #df_lab["dif_date_lab"] = df_lab.groupby(["cx_curp"])["fecha_laboratorio"].diff().dt.days
     
     # Ordenando
     df_exp_his_u = df_exp_his_u.sort_values(['fecha_consulta'])

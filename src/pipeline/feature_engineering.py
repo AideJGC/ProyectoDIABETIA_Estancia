@@ -420,7 +420,6 @@ def create_window(df, tam_ventana):
     
     # Iniciando dataframe de ventanas
     df_window_f = pd.DataFrame(columns = COLUMN_NAMES)
-    #tam_ventana = 3 #2
 
     # Por cada paciente único
     for i in range(len(df_time_hta['cx_curp'])):
@@ -440,7 +439,10 @@ def create_window(df, tam_ventana):
         renal = 0
         hta_5 = 0
         # Balance dataframe
-        hta_val = 30#3
+        # 1 año
+        hta_val = 3
+        # 3 meses
+        #hta_val = 35
 
         while (f_aux <= f_fin) and (hta_5 <= hta_val):
             df_window_p = pd.DataFrame(columns = COLUMN_NAMES)  
@@ -1818,7 +1820,10 @@ def feature_engineering(df, path_save):
     df['target_hta'] = df['hta_nvo_ce']
     
     # Creación de ventanas
-    df_f = create_window(df, 3)
+    # 1 año
+    df_f = create_window(df, 2)
+    # 3 meses
+    #df_f = create_window(df, 3)
     
     # Eliminando filas que no aportan información
     df_f = df_f[df_f['sum_num_consultas']>0]

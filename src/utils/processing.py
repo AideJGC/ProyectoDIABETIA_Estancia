@@ -194,7 +194,7 @@ def fecha_ini_fin(fecha_ini):
     fecha_ini = pd.to_datetime(fecha_ini)
     fecha_ini = pd.Timestamp(fecha_ini)
     
-    periodo = 1 # 1-Año; 2 - 3 meses
+    periodo = 2 # 1-Año; 2 - 3 meses
     
     if(periodo == 1):        
         a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')

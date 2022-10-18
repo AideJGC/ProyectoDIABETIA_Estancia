@@ -440,9 +440,9 @@ def create_window(df, tam_ventana):
         hta_5 = 0
         # Balance dataframe
         # 1 año
-        hta_val = 3
+        #hta_val = 3
         # 3 meses
-        #hta_val = 35
+        hta_val = 35
 
         while (f_aux <= f_fin) and (hta_5 <= hta_val):
             df_window_p = pd.DataFrame(columns = COLUMN_NAMES)  
@@ -1821,9 +1821,9 @@ def feature_engineering(df, path_save):
     
     # Creación de ventanas
     # 1 año
-    df_f = create_window(df, 2)
+    #df_f = create_window(df, 2)
     # 3 meses
-    #df_f = create_window(df, 3)
+    df_f = create_window(df, 3)
     
     # Eliminando filas que no aportan información
     df_f = df_f[df_f['sum_num_consultas']>0]

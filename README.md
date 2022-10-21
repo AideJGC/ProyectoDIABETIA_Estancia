@@ -4,13 +4,12 @@
 
 ## :large_blue_circle: Tabla de contenido
 
-1. [Introducción]() :clipboard:
-2. [Información general]() :bookmark_tabs:
-3. [Requerimientos de infraestructura]() :computer:
-4. [Instalación]() :minidisc:
-5. [Organización del código]( :octocat:
-6. [Correr el pipeline]() :green_circle:
-7. [Predicciones y visualización]() :bar_chart:
+1. [Introducción](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#introducci%C3%B3n-clipboard) :clipboard:
+2. [Información general](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#informaci%C3%B3n-general-bookmark_tabs) :bookmark_tabs:
+3. [Requerimientos de infraestructura](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#requerimientos-de-infraestructura-computer) :computer:
+4. [Instalación](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#instalaci%C3%B3n-minidisc) :minidisc:
+5. [Organización del código](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#organizaci%C3%B3n-del-c%C3%B3digo-octocat) :octocat:
+6. [Correr el pipeline](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#correr-el-pipeline-green_circle) :green_circle:
 
 ## Introducción :clipboard:
 

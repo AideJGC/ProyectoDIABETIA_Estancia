@@ -9,7 +9,7 @@
 3. [Requerimientos de infraestructura](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#requerimientos-de-infraestructura-computer) :computer:
 4. [Instalación](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#instalaci%C3%B3n-minidisc) :minidisc:
 5. [Organización del código](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#organizaci%C3%B3n-del-c%C3%B3digo-octocat) :octocat:
-6. [Correr el pipeline](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#correr-el-pipeline-green_circle) :green_circle:
+6. [Correr el programa](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/README.md#correr-el-programa-green_circle) :green_circle:
 
 ## Introducción :clipboard:
 

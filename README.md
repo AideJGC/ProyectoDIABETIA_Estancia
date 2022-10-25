@@ -176,13 +176,13 @@ Hay 2 opciones para correr el programa una vez instalado, ya sea vía Git hub o 
 
 1. **Entrenamiento**
 
-Para entrenar ejecutar el comando
+Para entrenar ejecutar el comando:
 
 ```
 python3 diabetia_hta.py 1 "../../data/Muestra_TT.csv"
 ```
 
-Donde el parpametro 3 (1) es la opción de la tarea,en este caso entrenamiento y el archivo "../../data/Muestra_TT.csv" son los datos con los que se sacará el modelo.
+Donde el parámetro 3 (1) es la opción de la tarea,en este caso entrenamiento y el archivo *"../../data/Muestra_TT.csv"* son los datos con los que se sacará el modelo.
 
 2. **Predicción**
 
@@ -190,4 +190,4 @@ Donde el parpametro 3 (1) es la opción de la tarea,en este caso entrenamiento y
 python3 diabetia_hta.py 2 "../../data/Muestra_V.csv"
 ```
 
-Donde el parpametro 3 (2) es la opción de la tarea,en este caso predicción y el archivo "../../data/Muestra_V.csv" son los datos a predecir.
+Donde el parámetro 3 (2) es la opción de la tarea,en este caso predicción y el archivo *"../../data/Muestra_V.csv"* son los datos a predecir.

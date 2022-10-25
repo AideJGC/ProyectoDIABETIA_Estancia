@@ -122,15 +122,11 @@ cd src/diabetia_hta/
 
 1. **Instalación**
 
-- Instale Docker en su computadore usando la siguiente instrucción:
-
-```
-comandp
-```
+- [Instale Docker](https://docs.docker.com/engine/install/ubuntu/) en su computadora, en este link encontrará como instalarse en ubuntu, pero vienen instrucciones para otras distribuciones.
 
 2. **Bajar imagen y ejecutar**
 
-- Ejecute el comendo para bajar la imagen de Docker y correr en línea de comandos:
+- Ejecute el siguiente comando para bajar la imagen de Docker y correr desde línea de comandos:
 
 ```
 docker run -it --rm --entrypoint /bin/bash 4id3jgc/docker_diabetia_hta:0.1

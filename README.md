@@ -19,7 +19,11 @@ El presente proyecto esta enfocado a apoyar en la predicción temprana de los pa
 
 Se trabajo con una base generada por 3 fuentes de datos:
 
-Y los datos con los que se trabajó tienen las siguientes características:
+- corhis_somatometria
+- exphis_hc_diabetes
+- NER
+
+Los datos con los que se trabajó tienen las siguientes características:
 
 - Número de registros: **55**
 - Número de columnas: **33**
@@ -35,7 +39,7 @@ Y los datos con los que se trabajó tienen las siguientes características:
 |trigliceridos|Text|Dato de trigliceridos|
 |hdl|Text|Dato de hdl|
 |ldl|Text|Dato de ldl|
-|fecha|Text|  |
+|fecha|Text|Fecha recuperada por algoritmo NER|
 |presion_arterial|Number|Presión arterial sistolica y diastolica|
 |hba1c|Floating Timestamp|Dato de la hemoglobina glucosilada|
 |hipertension|Text|Texto de hipertensión encontrado por NER|
@@ -50,17 +54,16 @@ Y los datos con los que se trabajó tienen las siguientes características:
 |año_de_diagnostico_diabetes|Number|Año de diagnóstico de diabetes|
 |año_de_diagnostico_hipertensión|Number|Año de diagnóstico de hipertensión seún el algoritmo NER|
 |fechas_procesadas|Number|Dato defecha encontrada por algorimo NER|
-|bandera_fechas_procesadas||Si la fecha procesada es correcta o esta sucia|
-|fuente||Fuente de datos|
-|in_consulta||Identificador de la consulta|
-|fecha_nacimiento||Fecha de nacimieno del paciente|
-|sexo||Sexo del paciente|
-|bandera_fechas_procesadas||Si la fecha procesada es correcta o esta sucia|
+|bandera_fechas_procesadas|Number|Si la fecha procesada es correcta o esta sucia|
+|fuente|Text|Fuente de datos|
+|in_consulta|Number|Identificador de la consulta|
+|fecha_nacimiento|Objeto|Fecha de nacimieno del paciente|
+|sexo|Objeto|Sexo del paciente|
 |medicamentos||Medicamentos preescritos al paciente en la consulta|
-|codigos_cie||Diagnósticos en Código CIE asignados al paciente en su consulta|
-|diagnosticos|Diagnósticos en texto asignados al paciente en su consulta|
-|fecha_consulta||Fecha de la consulta|
-|FechaNuevaHipertension||Nueva fecha evaluando medicamento hipertensivo, diagnóstico o mediciones de presión arterial|
+|codigos_cie|Objeto|Diagnósticos en Código CIE asignados al paciente en su consulta|
+|diagnosticos|Objeto|Diagnósticos en texto asignados al paciente en su consulta|
+|fecha_consulta|Date|Fecha de la consulta|
+|FechaNuevaHipertension|Date|Nueva fecha evaluando medicamento hipertensivo, diagnóstico o mediciones de presión arterial|
     
    
 #### Pregunta analítica a contestar con el modelo predictivo
@@ -141,28 +144,25 @@ El repositorio se encuentra organizado de la siguiente manera:
 ```
 ├── README.md          <- The top-level README for developers using this project.
 │
-├── docs               <- Space for Sphinx documentation
+├── .github/workflows  <- Action for docker
 │
 ├── notebooks          <- Jupyter notebooks.
 │
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
+├── data               <- Data and folder to save information.
 │
-├── results            <- Intermediate analysis as HTML, PDF, LaTeX, etc.
+├── output             <- Output from run code
 │
 ├── requirements.txt   <- The requirements file
-│
-├── .gitignore         <- Avoids uploading data, credentials, outputs, system files etc
-│
-├── infrastructure
 │
 ├── setup.py
 └── src                <- Source code for use in this project.
     ├── __init__.py    <- Makes src a Python module
     │
-    ├── utils      <- Functions used across the project
+    ├── utils          <- Functions used across the project
+    │    
+    ├── pipeline       <- Scripts to transform, modeling and predict data
     │
-    │
-    ├── etl       <- Scripts to transform data from raw to intermediate
+    ├── diabetia_hta   <- Main scripts to run app
 
 ```
 

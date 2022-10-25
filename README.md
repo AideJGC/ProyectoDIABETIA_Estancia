@@ -59,7 +59,7 @@ Los datos con los que se trabajó tienen las siguientes características:
 |in_consulta|Number|Identificador de la consulta|
 |fecha_nacimiento|Objeto|Fecha de nacimieno del paciente|
 |sexo|Objeto|Sexo del paciente|
-|medicamentos||Medicamentos preescritos al paciente en la consulta|
+|medicamentos|Text|Medicamentos preescritos al paciente en la consulta|
 |codigos_cie|Objeto|Diagnósticos en Código CIE asignados al paciente en su consulta|
 |diagnosticos|Objeto|Diagnósticos en texto asignados al paciente en su consulta|
 |fecha_consulta|Date|Fecha de la consulta|
@@ -150,11 +150,14 @@ El repositorio se encuentra organizado de la siguiente manera:
 │
 ├── data               <- Data and folder to save information.
 │
+├── dockerfiles        <- Code to create docker
+│
 ├── output             <- Output from run code
 │
 ├── requirements.txt   <- The requirements file
 │
 ├── setup.py
+│
 └── src                <- Source code for use in this project.
     ├── __init__.py    <- Makes src a Python module
     │

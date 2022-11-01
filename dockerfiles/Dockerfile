@@ -22,8 +22,6 @@ RUN echo "alias python=python3.7" >> ~/.bashrc
 RUN export PATH=${PATH}:/usr/bin/python3.7
 RUN /bin/bash -c "source ~/.bashrc"
  
-# Install pip
-
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && apt-get install -y nodejs
 
 WORKDIR /

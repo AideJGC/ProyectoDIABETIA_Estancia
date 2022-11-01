@@ -16,7 +16,7 @@ from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import roc_curve, roc_auc_score
 from sklearn.metrics import accuracy_score, precision_recall_curve, precision_score, recall_score
-from sklearn.metrics import confusion_matrix, plot_confusion_matrix
+from sklearn.metrics import confusion_matrix, plot_confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 
 def train_test(df): 
@@ -166,12 +166,13 @@ def recall_at_k(y_true, y_scores, k):
     return recall_score(y_true, y_pred)
 
 
-def print_results_model(X_test, y_test, best_model):
+def print_results_model(X_test, y_test, model, features, name):
     """
     """
-    model = best_model['best_model']
+    #model = best_model['best_model']
+    # col = list(best_model['features'])
     
-    col = list(best_model['features'])
+    col = list(features)
     X_test = X_test.filter(col)
     
     predicted_labels = model.predict(X_test)
@@ -186,10 +187,10 @@ def print_results_model(X_test, y_test, best_model):
     plt.title("ROC best RF, AUC: {}".format(roc_auc_score(y_test, predicted_labels)))
     plt.xlabel("fpr")
     plt.ylabel("tpr")
-    plt.savefig('../../output/ROC_curve.png', bbox_inches='tight')
+    plt.savefig('../../output/ROC_curve'+name+'.png', bbox_inches='tight')
     #plt.show()
     cm = plot_confusion_matrix(model, X_test, y_test, cmap=plt.cm.Blues)  
-    cm.figure_.savefig('../../output/confusion_matrix.png',dpi=300)
+    cm.figure_.savefig('../../output/confusion_matrix'+name+'.png',dpi=300)
     
     # Precision and recall at k%
     data_junta = pd.concat([X_test, y_test], axis=1)
@@ -208,17 +209,20 @@ def print_results_model(X_test, y_test, best_model):
     plt.ylabel("Mejor valor")
     plt.legend(['Precision', 'Recall'])
     plt.xlabel("%k")
-    plt.savefig('../../output/recall_precision_k.png', bbox_inches='tight')
+    plt.savefig('../../output/recall_precision_k'+name+'.png', bbox_inches='tight')
     #plt.show()
+    
+    print(classification_report(y_test,predicted_labels))
 
 
-def best_model(models, X_test, y_test, path_save): 
+def best_model(models, X_test, y_test, path_save, window): 
     
     scores = []
     best_estimator = []
     for i in range(len(models['models'])):
             scores.append(models['models'][i].best_score_) 
             best_estimator.append(models['models'][i].best_estimator_) 
+            print_results_model(X_test, y_test, models['models'][i],models['features'],"_"+window+"_"+str(i))
 
     max_score = max(scores)  
     max_score_index = scores.index(max_score)
@@ -228,7 +232,7 @@ def best_model(models, X_test, y_test, path_save):
     }    
         
     # Print results best model
-    print_results_model(X_test, y_test, best_model)
+    print_results_model(X_test, y_test, best_model['best_model'],best_model['features'],'best'+"_"+window)
     
     # Se guarda pkl
     utils.save_df(best_model, path_save)

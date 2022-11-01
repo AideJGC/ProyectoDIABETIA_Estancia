@@ -189,12 +189,12 @@ def dias_year(date):
 
 
 
-def fecha_ini_fin(fecha_ini):
+def fecha_ini_fin(fecha_ini,periodo):
     # Crear variable de ventanas máximas o hacer referencia a la variable años de conuslta
     fecha_ini = pd.to_datetime(fecha_ini)
     fecha_ini = pd.Timestamp(fecha_ini)
     
-    periodo = 2 # 1-Año; 2 - 3 meses
+    # 1-Año; 2 - 3 meses
     
     if(periodo == 1):        
         a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')
@@ -209,7 +209,7 @@ def fecha_ini_fin(fecha_ini):
         i_t = dias_year(i_t)
         f = dias_year(f)  
     
-    else:
+    elif(periodo == 2):   
         a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
         a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
         a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')

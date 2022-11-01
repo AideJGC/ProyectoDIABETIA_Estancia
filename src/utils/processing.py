@@ -213,7 +213,7 @@ def fecha_ini_fin(fecha_ini,periodo):
         i_t = dias_year(i_t)
         f = dias_year(f)  
     
-    else:"if(periodo == 2):   
+    else:#if(periodo == 2):   
         a_ini = fecha_ini+pd.to_timedelta(45, unit = 'D')
         a_inter = fecha_ini+pd.to_timedelta(90, unit = 'D')
         a_fin = fecha_ini+pd.to_timedelta(120, unit = 'D')

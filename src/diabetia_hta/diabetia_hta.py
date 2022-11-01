@@ -22,6 +22,7 @@ window = sys.argv[3]
 
 
 def main():
+    print("window: ", window)
     # Entrenamiento
     if (ent_pred == "1"):
         print("Iniciando entrenamiento---------------------------------------------------------------")

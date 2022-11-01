@@ -14,10 +14,11 @@ from src.pipeline import ingestion, transformation, feature_engineering, modelin
 # Argumentos
 # 1 entrenamiento o predicci�n 
 # archivo de datos
-# ventana
+# ventana: 1:año, 2:mes, 3: 6 meses
 
 ent_pred = sys.argv[1]
 file_data = sys.argv[2]
+window = sys.argv[3]
 
 
 def main():
@@ -27,7 +28,7 @@ def main():
         start_time = time.time()
         df = ingestion.ingesta_data(file_data, "../../data/data.pkl")
         df = transformation.transform(df, "../../data/transformation.pkl")
-        df = feature_engineering.feature_engineering(df, "../../data/feature_eng.pkl")
+        df = feature_engineering.feature_engineering(df, "../../data/feature_eng.pkl",window)
         df_m = df.loc[:, df.columns != 'cx_curp']
         #df_curp = df[["cx_curp"]]
         model_and_features, X_test, y_test = modeling.training(df_m)
@@ -42,7 +43,7 @@ def main():
         df = ingestion.ingesta_data(file_data, "../../data/new_data.pkl")
         df['hba1c'] = df['hba1c'].astype(str)
         df = transformation.transform(df, "../../data/new_transformation.pkl")
-        df = feature_engineering.feature_engineering(df, "../../data/new_data_fe.pkl")
+        df = feature_engineering.feature_engineering(df, "../../data/new_data_fe.pkl",window)
         df = modeling.predict(df, "../../data/best_model.pkl", "../../data/save_new_predict.pkl")
         print("Fin predicci�n en ", time.time() - start_time, " segundos")
         print("--------------------------------------------------------------------------------------")

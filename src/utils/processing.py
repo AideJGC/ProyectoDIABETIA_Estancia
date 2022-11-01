@@ -198,7 +198,7 @@ def fecha_ini_fin(fecha_ini,periodo):
     i = 0
     i_t = 0
     f = 0
-    print("periodo: ", periodo)
+    #print("periodo: ", periodo)
     
     if(periodo == 1):        
         a_ini = fecha_ini+pd.to_timedelta(365, unit = 'D')

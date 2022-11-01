@@ -26,8 +26,6 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && apt-get i
 
 WORKDIR /
 
-RUN apt install feh
-
 COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt

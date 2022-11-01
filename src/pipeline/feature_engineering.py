@@ -395,7 +395,7 @@ def gpo_med(df):
     
     return df
 
-def create_window(df, tam_ventana):
+def create_window(df, window):
     """
     """
     # Process unique cx_curp
@@ -442,12 +442,23 @@ def create_window(df, tam_ventana):
         # 1 año
         #hta_val = 3
         # 3 meses
-        hta_val = 35
+        # hta_val = 35
+        hta_val = 0
+        tam_ventana = 0
+        if(window == 1):
+            hta_val= 3
+            tam_ventana = 2
+        elif(window == 2):
+            hta_val= 35
+            tam_ventana = 3
+        #elif(window == 3):
+        #    hta_val= 35
+        
 
         while (f_aux <= f_fin) and (hta_5 <= hta_val):
             df_window_p = pd.DataFrame(columns = COLUMN_NAMES)  
 
-            a_ini, a_inter, a_fin = processing.fecha_ini_fin(f_aux) 
+            a_ini, a_inter, a_fin = processing.fecha_ini_fin(f_aux,window) 
 
             d_w1 = df[(df['cx_curp']==curp)&\
                     (df['fecha_consulta'] >= f_aux)&\
@@ -1796,7 +1807,7 @@ def imputation(df_1):
     return d_inp  
    
 
-def feature_engineering(df, path_save):
+def feature_engineering(df, path_save, window):
     """
     Recibe la ruta del pickle transformado y devuelve un pickle con nuevos features 
     en una ruta epecificada
@@ -1820,10 +1831,10 @@ def feature_engineering(df, path_save):
     df['target_hta'] = df['hta_nvo_ce']
     
     # Creación de ventanas
-    # 1 año
+    # 1:1 año
     #df_f = create_window(df, 2)
-    # 3 meses
-    df_f = create_window(df, 3)
+    # 2:3 meses
+    df_f = create_window(df, window)
     
     # Eliminando filas que no aportan información
     df_f = df_f[df_f['sum_num_consultas']>0]

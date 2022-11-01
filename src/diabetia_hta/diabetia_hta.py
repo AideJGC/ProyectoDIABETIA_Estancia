@@ -33,7 +33,7 @@ def main():
         df_m = df.loc[:, df.columns != 'cx_curp']
         #df_curp = df[["cx_curp"]]
         model_and_features, X_test, y_test = modeling.training(df_m)
-        model = modeling.best_model(model_and_features, X_test, y_test, "../../data/best_model.pkl")
+        model = modeling.best_model(model_and_features, X_test, y_test, "../../data/best_model_"+str(window)+".pkl",str(window))
         print("Finaliza entrenamiento en ", time.time() - start_time, " segundos")
         print("--------------------------------------------------------------------------------------")
         
@@ -45,7 +45,7 @@ def main():
         df['hba1c'] = df['hba1c'].astype(str)
         df = transformation.transform(df, "../../data/new_transformation.pkl")
         df = feature_engineering.feature_engineering(df, "../../data/new_data_fe.pkl",window)
-        df = modeling.predict(df, "../../data/best_model.pkl", "../../data/save_new_predict.pkl")
+        df = modeling.predict(df, "../../data/best_model_"+str(window)+".pkl", "../../data/save_new_predict.pkl")
         print("Fin predicci�n en ", time.time() - start_time, " segundos")
         print("--------------------------------------------------------------------------------------")
     else:

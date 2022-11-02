@@ -445,15 +445,17 @@ def create_window(df, window):
         # hta_val = 35
         hta_val = 0
         tam_ventana = 0
-        if(window == 1):
+        if(window == "1"):
             hta_val= 3
             tam_ventana = 2
-        elif(window == 2):
+        elif(window == "2"):
             hta_val= 35
             tam_ventana = 3
         #elif(window == 3):
         #    hta_val= 35
         
+        print("tam_ventana: ",tam_ventana)        
+        print("hta_val: ",hta_val)
 
         while (f_aux <= f_fin) and (hta_5 <= hta_val):
             df_window_p = pd.DataFrame(columns = COLUMN_NAMES)  

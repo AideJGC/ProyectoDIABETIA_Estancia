@@ -74,7 +74,7 @@ Dicha base de datos corresponde a una muestra de 55 pacientes con su historial m
 |MedicamentoNombre |Text| Nombre del medicamento |
 |Presion |Text|*No especificado* |
 
-de los cuales sólo se tomo *cx_curp* para cruzar con el archivo **Muestra.csv** y recuperar la *FechaNuevaHipertension*. El archivo **Muestra.csv** se dividio en [Muestra_TT.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_TT.csv) para entrenamiento y test,  y [Muestra_V.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_V.csv) para validación. 
+De estos 2 archivos se tomo el campo *cx_curp* para cruzar datos y recuperar del archivo **NewHypertensionList.csv** el dato de ***FechaNuevaHipertension***, quedando el archivo **Muestra.csv** con 33 columnas, el cual se separo en 2 archivos a su vez:[Muestra_TT.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_TT.csv) para entrenamiento y test,  y [Muestra_V.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_V.csv) para validación. 
 
 El campo **fuente** tiene los siguientes valores:
 

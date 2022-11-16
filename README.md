@@ -62,6 +62,8 @@ Se trabajo con 2 archivos que se unificaron para construir una base inicial a pa
 |diagnosticos|Objeto|Diagnósticos en texto asignados al paciente en su consulta|
 |fecha_consulta|Date|Fecha de la consulta|
 
+Dicha base de datos corresponde a una muestra de 55 pacientes con su historial médico, generando un total de 9315 registros, y 32 columnas.
+
 2. [NewHypertensionList.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/NewHypertensionList.csv): conformada por los siguientes campos.
 
 | Variable | Tipo  | Descripción |
@@ -72,45 +74,7 @@ Se trabajo con 2 archivos que se unificaron para construir una base inicial a pa
 |MedicamentoNombre |Text| Nombre del medicamento |
 |Presion |Text|*No especificado* |
 
-de los cuales sólo se tomo *cx_curp* para cruzar con el archivo **Muestra.csv** y recuperar la *FechaNuevaHipertension*. El archivo **Muestra.csv** se dividio en [Muestra_TT.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_TT.csv) para entrenamiento y test,  y [Muestra_V.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_V.csv) para validación. Quedando con la siguiente estructura:
-
-| Variable | Tipo  | Descripción |
-| :------- | :----:| :---------: |
-|newid |Number|Identificador de la consulta|
-|cx_curp |Text|CURP anonimizada del paciente|
-|nota_medica |Text|Nota médica del paciente|
-|glucosa |Number| Glucosa separada por un pipe, donde la primera medición es antes de tomar alimentos y la segunda después de alimentos. |
-|colesterol |Text|Dato de colesterol |
-|trigliceridos|Text|Dato de trigliceridos|
-|hdl|Text|Dato de hdl|
-|ldl|Text|Dato de ldl|
-|fecha|Text|Fecha recuperada por algoritmo NER|
-|presion_arterial|Number|Presión arterial sistolica y diastolica|
-|hba1c|Floating Timestamp|Dato de la hemoglobina glucosilada|
-|hipertension|Text|Texto de hipertensión encontrado por NER|
-|plaquetas|Text|Dato de plaquetas|
-|creatinina|Text|Dato de creatinina|
-|acido_urico|Number|Dato de ácido urico|
-|urea|Number|Dato de urea|
-|peso|Location|Peso del paciente|
-|altura|Location|Altura del paciente|
-|tfg|Number|Dato de tfg|
-|imc|Number|Dato de IMC|
-|año_de_diagnostico_diabetes|Number|Año de diagnóstico de diabetes|
-|año_de_diagnostico_hipertensión|Number|Año de diagnóstico de hipertensión seún el algoritmo NER|
-|fechas_procesadas|Number|Dato defecha encontrada por algorimo NER|
-|bandera_fechas_procesadas|Number|Si la fecha procesada es correcta o esta sucia|
-|fuente|Text|Fuente de datos|
-|in_consulta|Number|Identificador de la consulta|
-|fecha_nacimiento|Objeto|Fecha de nacimieno del paciente|
-|sexo|Objeto|Sexo del paciente|
-|medicamentos|Text|Medicamentos preescritos al paciente en la consulta|
-|codigos_cie|Objeto|Diagnósticos en Código CIE asignados al paciente en su consulta|
-|diagnosticos|Objeto|Diagnósticos en texto asignados al paciente en su consulta|
-|fecha_consulta|Date|Fecha de la consulta|
-|FechaNuevaHipertension|Date|Nueva fecha evaluando medicamento hipertensivo, diagnóstico o mediciones de presión arterial|
-
-Dicha base de datos corresponde a una muestra de 55 pacientes con su historial médico, generando un total de 9315 registros, y 33 columnas.
+de los cuales sólo se tomo *cx_curp* para cruzar con el archivo **Muestra.csv** y recuperar la *FechaNuevaHipertension*. El archivo **Muestra.csv** se dividio en [Muestra_TT.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_TT.csv) para entrenamiento y test,  y [Muestra_V.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_V.csv) para validación. 
 
 El campo **fuente** tiene los siguientes valores:
 
@@ -252,3 +216,21 @@ python3 diabetia_hta.py 2 "../../data/Muestra_V.csv" 1
 ```
 
 Donde el parámetro 3 (2) es la opción de la tarea,en este caso predicción, el archivo *"../../data/Muestra_V.csv"* son los datos a predecir, con con ventana a 2 años.
+
+
+
+## Referencias
+
+1.	[Manual de Organización del Instituto Mexicano del Seguro Social](http://www.imss.gob.mx/sites/all/statics/pdf/manualesynormas/0500-002-001_3.pdf). Folio 186, 28 de Agosto de 2018. Recuperado 07 de Noviembre de 2022.
+2.	[Informe al Ejecutivo Federal y al Congreso de la Unión sobre la situación financiera y los riesgos del Instituto Mexicano del Seguro Social](http://www.imss.gob.mx/sites/all/statics/pdf/informes/20212022/19-informe-completo.pdf ). 2021-2022. Recuperado 26 de octubre de 2022.
+3.	[Norma para la atención integral a la Salud en la Unidades de Medicina Familiar del Instituto Mexicano del Seguro Social](https://www.imss.gob.mx/sites/all/statics/pdf/manualesynormas/2000-001-029.pdf). 03 de Noviembre de 2021. Recuperado 26 de octubre de 2022.
+4.	[Norma Oficial Mexicana NOM-004-SSA3-2012, Del expediente clínico](https://www.cndh.org.mx/DocTR/2016/JUR/A70/01/JUR-20170331-NOR26.pdf). Fecha de publicación: 15 de octubre de 2012. Recuperado 26 de octubre de 2022.
+5.	Marshall, C. (2021, 13 diciembre). [What is named entity recognition (NER) and how can I use it? Medium](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d). Recuperado 26 de octubre de 2022.
+6.	Dathan R, A. (2021, 3 noviembre). [A Beginner’s Introduction to NER (Named Entity Recognition)](https://www.analyticsvidhya.com/blog/2021/11/a-beginners-introduction-to-ner-named-entity-recognition/). Analytics Vidhya. Recuperado 26 de octubre de 2022.
+7.	[sklearn.impute.SimpleImputer. (s. f.). scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html). Recuperado 26 de octubre de 2022.
+8.	[Cuadro Básico de Medicamentos del Instituto Mexicano del Seguro Social. 971 Claves Específicas (2019, 05 agosto)](http://www.imss.gob.mx/sites/all/statics/pdf/cuadros-basicos/CBM.pdf ). Dirección de Prestaciones Médicas. Recuperado 26 de octubre de 2022.
+9.	Rodolfo Rodríguez Carranza. [Vademécum Académico de Medicamentos](https://accessmedicina.mhmedical.com/book.aspx?bookID=1552 ). Sexta Edición en español por, UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO. ISBN: 978-607-02-4172-7. Recuperado 26 de octubre de 2022.
+10.	[Clasificación Internacional de Enfermedades](https://www.sanidad.gob.es/estadEstudios/estadisticas/normalizacion/CIE10/Clasif_Inter_Enfer_CIE_10_rev_3_ed.diag.pdf )- 10.ª Revisión. Modificación Clínica. 3.ª edición Enero 2020. Recuperado 26 de octubre de 2022.
+11.	[Lista mexicana para la selección de las principales causas](http://dgis.salud.gob.mx/descargas/pdf/lista_mexicana.pdf ). Dirección General de Información en Salud. Secretaría de Salud. Recuperado 26 de octubre de 2022.
+12.	[Diagnóstico y tratamiento de Hipertensión Arterial en el Adulto Mayor. Evidencias y Recomendaciones](http://www.imss.gob.mx/sites/all/statics/guiasclinicas/238GER.pdf). Catálogo Maestro de Guías de Práctica Clínica: IMSS-238-09. Actualización 2017. Recuperado 26 de octubre de 2022.
+

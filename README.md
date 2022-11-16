@@ -23,18 +23,57 @@ El objetivo  en este proyecto fue crear un modelo para determinar que pacientes 
 
 ## Información general :bookmark_tabs:
 
-Se trabajo con una base generada por 3 fuentes de datos:
+Se trabajo con 2 archivos que se unificaron para construir una base inicial a partir de los siguientes archivos:
 
-- corhis_somatometria
-- exphis_hc_diabetes
-- NER
+1. **Muestra.csv**: conformada por los siguientes campos.
 
-Los datos con los que se trabajó tienen las siguientes características:
+| Variable | Tipo  | Descripción |
+| :------- | :----:| :---------: |
+|newid |Number|Identificador de la consulta|
+|cx_curp |Text|CURP anonimizada del paciente|
+|nota_medica |Text|Nota médica del paciente|
+|glucosa |Number| Glucosa separada por un pipe, donde la primera medición es antes de tomar alimentos y la segunda después de alimentos. |
+|colesterol |Text|Dato de colesterol |
+|trigliceridos|Text|Dato de trigliceridos|
+|hdl|Text|Dato de hdl|
+|ldl|Text|Dato de ldl|
+|fecha|Text|Fecha recuperada por algoritmo NER|
+|presion_arterial|Number|Presión arterial sistolica y diastolica|
+|hba1c|Floating Timestamp|Dato de la hemoglobina glucosilada|
+|hipertension|Text|Texto de hipertensión encontrado por NER|
+|plaquetas|Text|Dato de plaquetas|
+|creatinina|Text|Dato de creatinina|
+|acido_urico|Number|Dato de ácido urico|
+|urea|Number|Dato de urea|
+|peso|Location|Peso del paciente|
+|altura|Location|Altura del paciente|
+|tfg|Number|Dato de tfg|
+|imc|Number|Dato de IMC|
+|año_de_diagnostico_diabetes|Number|Año de diagnóstico de diabetes|
+|año_de_diagnostico_hipertensión|Number|Año de diagnóstico de hipertensión seún el algoritmo NER|
+|fechas_procesadas|Number|Dato defecha encontrada por algorimo NER|
+|bandera_fechas_procesadas|Number|Si la fecha procesada es correcta o esta sucia|
+|fuente|Text|Fuente de datos|
+|in_consulta|Number|Identificador de la consulta|
+|fecha_nacimiento|Objeto|Fecha de nacimieno del paciente|
+|sexo|Objeto|Sexo del paciente|
+|medicamentos|Text|Medicamentos preescritos al paciente en la consulta|
+|codigos_cie|Objeto|Diagnósticos en Código CIE asignados al paciente en su consulta|
+|diagnosticos|Objeto|Diagnósticos en texto asignados al paciente en su consulta|
+|fecha_consulta|Date|Fecha de la consulta|
 
-- Número de registros: **55**
-- Número de columnas: **33**
-- Diccionario de datos:
- 
+2. [NewHypertensionList.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/NewHypertensionList.csv): conformada por los siguientes campos.
+
+| Variable | Tipo  | Descripción |
+| :------- | :----:| :---------: |
+|cx_curp |Text|CURP anonimizada del paciente|
+|FechaNuevaHipertension|Date|Nueva fecha evaluando medicamento hipertensivo, diagnóstico o mediciones de presión arterial|
+|MedicamentoCodigo |Text|Código del medicamento|
+|MedicamentoNombre |Text| Nombre del medicamento |
+|Presion |Text|*No especificado* |
+
+de los cuales sólo se tomo *cx_curp* para cruzar con el archivo **Muestra.csv** y recuperar la *FechaNuevaHipertension*. El archivo **Muestra.csv** se dividio en [Muestra_TT.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_TT.csv) para entrenamiento y test,  y [Muestra_V.csv](https://github.com/AideJGC/ProyectoDIABETIA_Estancia/blob/main/data/Muestra_V.csv) para validación. Quedando con la siguiente estructura:
+
 | Variable | Tipo  | Descripción |
 | :------- | :----:| :---------: |
 |newid |Number|Identificador de la consulta|
@@ -70,13 +109,21 @@ Los datos con los que se trabajó tienen las siguientes características:
 |diagnosticos|Objeto|Diagnósticos en texto asignados al paciente en su consulta|
 |fecha_consulta|Date|Fecha de la consulta|
 |FechaNuevaHipertension|Date|Nueva fecha evaluando medicamento hipertensivo, diagnóstico o mediciones de presión arterial|
-    
+
+Dicha base de datos corresponde a una muestra de 55 pacientes con su historial médico, generando un total de 9315 registros, y 33 columnas.
+
+El campo **fuente** tiene los siguientes valores:
+
+- corhis_somatometria: datos de somatrometría
+- exphis_hc_diabetes: datos provenientes de expediente histórico
+- NER: datos recuperador con un modelo de aprendizaje automático denominado NER, que es una forma de procesamiento del lenguaje natural (NLP), donde se realiza la detección de entidades y categorización de las mismas. Esta tarea fue realizada por un alumno de la Licenciatura de Tecnologías para la Información en Ciencias en la Escuela Nacional de Estudios Superiores Unidad Morelia. 
+   
    
 #### Pregunta analítica a contestar con el modelo predictivo
 
 Con este proyecto se piensa contestar la siguiente pregunta:
 
-- ¿El paciente el siguiente año tendrá o no hipertención arterial?
+- ¿El paciente con DM2 el siguiente año tendrá o no hipertención arterial?
 
 #### Frecuencia de actualización de los datos
 
@@ -178,22 +225,30 @@ El repositorio se encuentra organizado de la siguiente manera:
 
 ## Correr el programa :green_circle:
 
-Hay 2 opciones para correr el programa una vez instalado, ya sea vía Git hub o Docker:
+Hay 2 opciones para correr el programa una vez instalado, ya sea vía Git hub o Docker. Este programa se corre vía línea de comendos, donde realiza tareas dependiendo de los parámetros que se le asignen:
+
+- Primer parámetro corresponde a tarea a realizar: Entrenamiento (1) o predicción (2).
+- Segundo parámetro corresponde al archivo de dato sobre el cuál ejecutará la cción.
+- Tercer parámetro corresponde a la ventana a trabajar: 2 años (1) o 3 meses (2).
+
+***EJEMPLOS***
 
 1. **Entrenamiento**
 
 Para entrenar ejecutar el comando:
 
 ```
-python3 diabetia_hta.py 1 "../../data/Muestra_TT.csv"
+python3 diabetia_hta.py 1 "../../data/Muestra_TT.csv" 1
 ```
 
-Donde el parámetro 3 (1) es la opción de la tarea,en este caso entrenamiento y el archivo *"../../data/Muestra_TT.csv"* son los datos con los que se sacará el modelo.
+Donde:
+
+- El primer parámetro 1 (1) es la opción de la tarea,en este caso entrenamiento, el archivo *"../../data/Muestra_TT.csv"* son los datos con los que se sacará el modelo, con ventana a 2 años.
 
 2. **Predicción**
 
 ```
-python3 diabetia_hta.py 2 "../../data/Muestra_V.csv"
+python3 diabetia_hta.py 2 "../../data/Muestra_V.csv" 1
 ```
 
-Donde el parámetro 3 (2) es la opción de la tarea,en este caso predicción y el archivo *"../../data/Muestra_V.csv"* son los datos a predecir.
+Donde el parámetro 3 (2) es la opción de la tarea,en este caso predicción, el archivo *"../../data/Muestra_V.csv"* son los datos a predecir, con con ventana a 2 años.

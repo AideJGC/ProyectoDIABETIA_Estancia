@@ -13,7 +13,13 @@
 
 ## Introducción :clipboard:
 
-El presente proyecto esta enfocado a apoyar en la predicción temprana de los pacientes con Diabetes Mellitus del Instituto Méxicano del Seguro Social, en particular de la OOAD de Michoacán que tendran como comorblidad Hipertensión arterial el próximo año.
+El IMSS es un organismo descentralizado del Gobierno Federal Mexicano sectorizado a la Secretaría de Salud, que tiene por objeto organizar y administrar el Seguro Social, cuya finalidad es garantizar el derecho a la salud, la asistencia médica, la protección de los medios de subsistencia y los servicios sociales necesarios para el bienestar individual y colectivo, la población que cuenta con afiliación al instituto se les denomina derechohabientes.
+
+Entre algunas de las tareas que tiene el IMSS está el desarrollo de investigación en salud y dirigir los procesos de promoción a la salud, prevención y detección de enfermedades. Bajo este marcó el IMSS tiene diversos Centros o unidades de investigación en el país, uno de ellos es el Centro de Investigación Biomédica (CIB) de Michoacán que actualmente tiene el proyecto denominado “DiabetIA”, cuyo objetivo es hacer un estudio longitudinal para el desarrollo de modelos predictivos de complicaciones crónicas de la Diabetes Mellitus tipo 2 (DM2).
+
+La diabetes mellitus y la hipertensión arterial se han posicionado como la principal causa de gasto médico para el IMSS desde hace más de una década. En 2021 el número de pacientes atendidos por diabetes mellitus fue de 3.1 millones, y de  hipertensión arterial de 4.8 millones.2 Además la diabetes mellitus se ha convertido en la principal causa de muerte seguido de las cardiopatías, enfermedades cerebrovascular e hipertensivas. Por los que es importante establecer mecanismos de prevención, poder minimizar a tiempo el daño orgánico del paciente y evitar así un deceso. 
+
+El objetivo  en este proyecto fue crear un modelo para determinar que pacientes con DM2 tendrán hipertensión arterial (HTA) como complicación el siguiente año. 
 
 ## Información general :bookmark_tabs:
 

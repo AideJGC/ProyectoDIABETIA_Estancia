@@ -1,4 +1,3 @@
-#
 FROM ubuntu:20.04
 USER root
 ENV TIMEZONE America/Mexico_City
